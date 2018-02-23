@@ -11,6 +11,7 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 var kSpeed = 40;
+
 MyGame.prototype.radomizeVelocity = function()
 {
     var i = 0;

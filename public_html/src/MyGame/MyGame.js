@@ -12,15 +12,46 @@
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
 function MyGame() {
+
+    /* Textures */
     this.kMinionSprite = "assets/minion_sprite.png";
     this.kPlatformTexture = "assets/platform.png";
     this.kWallTexture = "assets/wall.png";
     this.kTargetTexture = "assets/target.png";
-    
-    // The camera to view the scene
+
+    /* GameObjects */
+    // HeroCar
+    this.mHeroCar = null;
+
+    // EnemyCar
+    this.mEnemyCar = null;
+
+    // Boosters on the field
+    this.mBoosters = null;
+
+    // Ball
+    this.mBall = null;
+
+    // Goal
+    this.mGoals = null;
+
+    // Obstacles
+    this.mObstacles = null;
+
+    // (Spectators)
+
+    /* Cameras */
+    // Main camera
     this.mCamera = null;
 
+    // Field Minimap camera
+    
+
+    /* UI Components and FontRenderables */
+    // Score
     this.mMsg = null;
+
+    /*
     this.mShapeMsg = null;
 
     this.mAllObjs = null;
@@ -30,11 +61,14 @@ function MyGame() {
     
     this.mCurrentObj = 0;
     this.mTarget = null;
+    */
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
 
 
 MyGame.prototype.loadScene = function () {
+
+    // Load Textures
     gEngine.Textures.loadTexture(this.kMinionSprite);
     gEngine.Textures.loadTexture(this.kPlatformTexture);
     gEngine.Textures.loadTexture(this.kWallTexture);
@@ -43,6 +77,8 @@ MyGame.prototype.loadScene = function () {
 };
 
 MyGame.prototype.unloadScene = function () {
+
+    // Unload Textures
     gEngine.Textures.unloadTexture(this.kMinionSprite);
     gEngine.Textures.unloadTexture(this.kPlatformTexture);
     gEngine.Textures.unloadTexture(this.kWallTexture);
@@ -60,31 +96,34 @@ MyGame.prototype.initialize = function () {
             // sets the background to gray
     gEngine.DefaultResources.setGlobalAmbientIntensity(3);
       
-    this.mHero = new Hero(this.kMinionSprite);
-    this.mAllObjs = new GameObjectSet();
+    this.mHeroCar = new HeroCar(this.kMinionSprite);
+
+    // this.mAllObjs = new GameObjectSet();
     
-    this.createBounds();
-    this.mFirstObject = this.mAllObjs.size();
-    this.mCurrentObj = this.mFirstObject;
+    // this.createBounds();
+    // this.mFirstObject = this.mAllObjs.size();
+    // this.mCurrentObj = this.mFirstObject;
     
-    this.mAllObjs.addToSet(this.mHero);
+    // this.mAllObjs.addToSet(this.mHeroCar);
     var y = 70;
     var x = 10;
     for (var i = 1; i<=5; i++) {
-        var m = new Minion(this.kMinionSprite, x, y, ((i%2)!==0));
+        // var m = new Minion(this.kMinionSprite, x, y, ((i%2)!==0));
         x += 20;
-        this.mAllObjs.addToSet(m);
+        // this.mAllObjs.addToSet(m);
     }
 
-    this.mMsg = new FontRenderable("Status Message");
+    this.mMsg = new FontRenderable("Score 0 - 0");
     this.mMsg.setColor([0, 0, 0, 1]);
     this.mMsg.getXform().setPosition(5, 7);
     this.mMsg.setTextHeight(3);
     
+    /*
     this.mShapeMsg = new FontRenderable("Shape");
     this.mShapeMsg.setColor([0, 0, 0, 1]);
     this.mShapeMsg.getXform().setPosition(5, 73);
     this.mShapeMsg.setTextHeight(2.5);
+    */
 };
 
 // This is the draw function, make sure to setup proper drawing environment, and more
@@ -95,16 +134,16 @@ MyGame.prototype.draw = function () {
 
     this.mCamera.setupViewProjection();
     
-    this.mAllObjs.draw(this.mCamera);
+    // this.mAllObjs.draw(this.mCamera);
     
     // for now draw these ...
     /*for (var i = 0; i<this.mCollisionInfos.length; i++) 
         this.mCollisionInfos[i].draw(this.mCamera); */
-    this.mCollisionInfos = []; 
+    // this.mCollisionInfos = []; 
     
-    this.mTarget.draw(this.mCamera);
+    // this.mTarget.draw(this.mCamera);
     this.mMsg.draw(this.mCamera);   // only draw status in the main camera
-    this.mShapeMsg.draw(this.mCamera);
+    // this.mShapeMsg.draw(this.mCamera);
 };
 
 MyGame.prototype.increasShapeSize = function(obj, delta) {
@@ -129,17 +168,17 @@ MyGame.prototype.update = function () {
     }
     
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Left)) {
-        this.mCurrentObj -= 1;
-        if (this.mCurrentObj < this.mFirstObject)
-            this.mCurrentObj = this.mAllObjs.size() - 1;
+        // this.mCurrentObj -= 1;
+        // if (this.mCurrentObj < this.mFirstObject)
+            // this.mCurrentObj = this.mAllObjs.size() - 1;
     }            
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Right)) {
-        this.mCurrentObj += 1;
-        if (this.mCurrentObj >= this.mAllObjs.size())
-            this.mCurrentObj = this.mFirstObject;
+        // this.mCurrentObj += 1;
+        // if (this.mCurrentObj >= this.mAllObjs.size())
+            // this.mCurrentObj = this.mFirstObject;
     }
 
-    var obj = this.mAllObjs.getObjectAt(this.mCurrentObj);
+    // var obj = this.mAllObjs.getObjectAt(this.mCurrentObj);
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Y)) {
         this.increasShapeSize(obj, MyGame.kBoundDelta);
     }
@@ -151,28 +190,28 @@ MyGame.prototype.update = function () {
         var x = 20 + Math.random() * 60;
         var y = 75;
         var m = new Minion(this.kMinionSprite, x, y, true);
-        this.mAllObjs.addToSet(m);
+        // this.mAllObjs.addToSet(m);
     }
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.G)) {
         var x = 20 + Math.random() * 60;
         var y = 75;
         var m = new Minion(this.kMinionSprite, x, y, false);
-        this.mAllObjs.addToSet(m);
+        // this.mAllObjs.addToSet(m);
     }
         
-    obj.keyControl();
-    obj.getRigidBody().userSetsState();
+    // obj.keyControl(); -> part of the WASDObj, not the intended behavior for HeroCar
+    // obj.getRigidBody().userSetsState();
     
-    this.mAllObjs.update(this.mCamera);
+    // this.mAllObjs.update(this.mCamera);
     
-    gEngine.Physics.processCollision(this.mAllObjs, this.mCollisionInfos);
+    // gEngine.Physics.processCollision(this.mAllObjs, this.mCollisionInfos);
 
-    var p = obj.getXform().getPosition();
-    this.mTarget.getXform().setPosition(p[0], p[1]);
+    // var p = obj.getXform().getPosition();
+    // this.mTarget.getXform().setPosition(p[0], p[1]);
     msg += "  P(" + gEngine.Physics.getPositionalCorrection() + 
            " " + gEngine.Physics.getRelaxationCount() + ")" +
            " V(" + gEngine.Physics.getHasMotion() + ")";
-    this.mMsg.setText(msg);
+    // this.mMsg.setText(msg);
     
-    this.mShapeMsg.setText(obj.getRigidBody().getCurrentState());
+    // this.mShapeMsg.setText(obj.getRigidBody().getCurrentState());
 };

@@ -1,6 +1,6 @@
-/* File: Hero.js 
+/* File: HeroCar.js 
  *
- * Creates and initializes the Hero (Dye)
+ * Creates and initializes the HeroCar (Dye)
  * overrides the update function of GameObject to define
  * simple Dye behavior
  */
@@ -11,7 +11,13 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function Hero(spriteTexture) {
+function HeroCar(spriteTexture) {
+
+    // implement this
+
+    // Boosters that the car has picked up
+
+    /*
     this.kDelta = 0.3;
 
     this.mDye = new SpriteRenderable(spriteTexture);
@@ -25,9 +31,12 @@ function Hero(spriteTexture) {
     this.setRigidBody(r);
     this.toggleDrawRenderable();
     this.toggleDrawRigidShape();
+    */
 }
-gEngine.Core.inheritPrototype(Hero, WASDObj);
+gEngine.Core.inheritPrototype(HeroCar, GameObject);
 
-Hero.prototype.update = function () {
+HeroCar.prototype.update = function () {
     GameObject.prototype.update.call(this);
 };
+
+// HeroCar.prototype.draw = fumction () { // implement this };
