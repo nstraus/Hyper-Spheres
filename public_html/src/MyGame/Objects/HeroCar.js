@@ -17,21 +17,22 @@ function HeroCar(spriteTexture) {
 
     // Boosters that the car has picked up
 
-    /*
     this.kDelta = 0.3;
 
-    this.mDye = new SpriteRenderable(spriteTexture);
-    this.mDye.setColor([1, 1, 1, 0]);
-    this.mDye.getXform().setPosition(50, 40);
-    this.mDye.getXform().setSize(3, 4);
-    this.mDye.setElementPixelPositions(0, 120, 0, 180);
-    GameObject.call(this, this.mDye);
+    this.mCar = new TextureRenderable(spriteTexture);
+    this.mCar.setColor([1, 1, 1, 0]);
+    this.mCar.getXform().setPosition(50, 40);
+    this.mCar.getXform().setSize(10, 10);
+    // this.mCar.setElementPixelPositions(0, 120, 0, 180);
+    GameObject.call(this, this.mCar);
     
+    /*
     var r = new RigidRectangle(this.getXform(), 3, 4);
     this.setRigidBody(r);
     this.toggleDrawRenderable();
     this.toggleDrawRigidShape();
     */
+
 }
 gEngine.Core.inheritPrototype(HeroCar, GameObject);
 

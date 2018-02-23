@@ -14,7 +14,7 @@
 function MyGame() {
 
     /* Textures */
-    this.kMinionSprite = "assets/minion_sprite.png";
+    this.kRedCar = "assets/RedCar.png";
     this.kPlatformTexture = "assets/platform.png";
     this.kWallTexture = "assets/wall.png";
     this.kTargetTexture = "assets/target.png";
@@ -45,7 +45,7 @@ function MyGame() {
     this.mCamera = null;
 
     // Field Minimap camera
-    
+
 
     /* UI Components and FontRenderables */
     // Score
@@ -69,7 +69,7 @@ gEngine.Core.inheritPrototype(MyGame, Scene);
 MyGame.prototype.loadScene = function () {
 
     // Load Textures
-    gEngine.Textures.loadTexture(this.kMinionSprite);
+    gEngine.Textures.loadTexture(this.kRedCar);
     gEngine.Textures.loadTexture(this.kPlatformTexture);
     gEngine.Textures.loadTexture(this.kWallTexture);
     gEngine.Textures.loadTexture(this.kTargetTexture);
@@ -79,7 +79,7 @@ MyGame.prototype.loadScene = function () {
 MyGame.prototype.unloadScene = function () {
 
     // Unload Textures
-    gEngine.Textures.unloadTexture(this.kMinionSprite);
+    gEngine.Textures.unloadTexture(this.kRedCar);
     gEngine.Textures.unloadTexture(this.kPlatformTexture);
     gEngine.Textures.unloadTexture(this.kWallTexture);
     gEngine.Textures.unloadTexture(this.kTargetTexture);
@@ -96,7 +96,7 @@ MyGame.prototype.initialize = function () {
             // sets the background to gray
     gEngine.DefaultResources.setGlobalAmbientIntensity(3);
       
-    this.mHeroCar = new HeroCar(this.kMinionSprite);
+    this.mHeroCar = new HeroCar(this.kRedCar);
 
     // this.mAllObjs = new GameObjectSet();
     
@@ -134,6 +134,7 @@ MyGame.prototype.draw = function () {
 
     this.mCamera.setupViewProjection();
     
+    this.mHeroCar.draw(this.mCamera);
     // this.mAllObjs.draw(this.mCamera);
     
     // for now draw these ...
