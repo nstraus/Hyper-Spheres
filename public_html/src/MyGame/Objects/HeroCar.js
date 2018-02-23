@@ -17,14 +17,7 @@ function HeroCar(spriteTexture) {
 
     // Boosters that the car has picked up
 
-    this.kDelta = 0.3;
-
-    this.mCar = new TextureRenderable(spriteTexture);
-    this.mCar.setColor([1, 1, 1, 0]);
-    this.mCar.getXform().setPosition(50, 40);
-    this.mCar.getXform().setSize(10, 10);
-    // this.mCar.setElementPixelPositions(0, 120, 0, 180);
-    GameObject.call(this, this.mCar);
+    Car.call(this, spriteTexture);
     
     /*
     var r = new RigidRectangle(this.getXform(), 3, 4);
@@ -34,10 +27,11 @@ function HeroCar(spriteTexture) {
     */
 
 }
-gEngine.Core.inheritPrototype(HeroCar, GameObject);
+gEngine.Core.inheritPrototype(HeroCar, Car);
 
 HeroCar.prototype.update = function () {
     GameObject.prototype.update.call(this);
 };
 
 // HeroCar.prototype.draw = fumction () { // implement this };
+
