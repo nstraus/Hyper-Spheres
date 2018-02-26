@@ -32,10 +32,12 @@ MyGame.prototype.createBounds = function() {
     for (x = 15; x < 120; x+=30) 
         this.platformAt(x, y, w, 180);
     
+    /*
     this.platformAt(40, 40, 20, -30);
     this.platformAt(60, 30, 20, 0);
     this.platformAt(20, 20, 20, 0);
     this.platformAt(70, 50, 20, 0);
+    */
     
     x = 2;
     w = 3;
@@ -86,5 +88,14 @@ MyGame.prototype.platformAt = function (x, y, w, rot) {
     this.mAllObjs.addToSet(g);
 };
 
-
+MyGame.prototype.shoot = function(mouseX, mouseY) {
+    var i = 0;
+    for (i = 0; i < 1; i++) { // first object in this.mAllObs is the HeroCar
+        var obj = this.mAllObjs.getObjectAt(i);
+        var rigidShape = obj.getRigidBody();
+        var differenceX = mouseX - obj.getXform().getXPos();
+        var differenceY = mouseY - obj.getXform().getYPos();
+        rigidShape.setVelocity(differenceX, differenceY);
+    }
+};
     

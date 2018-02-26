@@ -19,6 +19,9 @@ function MyGame() {
     // this art is probably fine for the demo on Monday
     this.kRedCar = "assets/RedCar.png";
     this.kGreenCar = "assets/GreenCar.png";
+    this.kPlatformTexture = "assets/platform.png";
+    this.kWallTexture = "assets/wall.png";
+    this.kTargetTexture = "assets/target.png";
 
     /* GameObjects */
     // HeroCar
@@ -34,16 +37,22 @@ function MyGame() {
     this.mBall = null;
 
     // Goal
-    this.mGoals = null;
+    this.mGoals = [];
 
     // Obstacles
     this.mObstacles = null;
+
+    // Field Boundaries
+    this.mFieldBounds = [];
 
     // (Spectators)
 
     /* Cameras */
     // Main camera
     this.mCamera = null;
+
+    // AllObjects Array for Physics Collisions
+    this.mAllObjs = null;
 
     // Field Minimap camera
 
@@ -63,6 +72,9 @@ MyGame.prototype.loadScene = function () {
     // Load Textures
     gEngine.Textures.loadTexture(this.kRedCar);
     gEngine.Textures.loadTexture(this.kGreenCar);
+    gEngine.Textures.loadTexture(this.kPlatformTexture);
+    gEngine.Textures.loadTexture(this.kWallTexture);
+    gEngine.Textures.loadTexture(this.kTargetTexture);
 
             
 };
@@ -72,6 +84,9 @@ MyGame.prototype.unloadScene = function () {
     // Unload Textures
     gEngine.Textures.unloadTexture(this.kRedCar);
     gEngine.Textures.unloadTexture(this.kGreenCar);
+    gEngine.Textures.unloadTexture(this.kPlatformTexture);
+    gEngine.Textures.unloadTexture(this.kWallTexture);
+    gEngine.Textures.unloadTexture(this.kTargetTexture);
 
 };
 
@@ -92,6 +107,31 @@ MyGame.prototype.initialize = function () {
     // Enemy Car
     this.mEnemyCar = new EnemyCar(this.kGreenCar);
 
+    // Ball
+    this.mBall = new Ball(this.kRedCar); // find a texture for this
+
+    // Goals
+    this.mGoals[0] = new Goal(this.kRedCar, true); // left side of viewport // find a texture for this
+
+    this.mGoals[1] = new Goal(this.kRedCar, false); // right side of viewport // find a texture for this
+
+    // AllObjs Array for Physics Collisions
+    this.mAllObjs = new GameObjectSet();
+    this.mAllObjs.addToSet(this.mHeroCar);
+    this.mAllObjs.addToSet(this.mEnemyCar);
+    this.mAllObjs.addToSet(this.mBall);
+    // this.mAllObjs.addToSet(this.mGoals[0]); this lets the Goals get pushed around with Engine.processCollisions
+    // this.mAllObjs.addToSet(this.mGoals[1]);
+
+    this.createBounds(); // needs the textures this.kTextureTarget, this.kWallTexture, this.kPlatformTexture
+
+    // Field Boundaries is just a set of BoundingBox for left, Right, Top, Bottom
+    // center, width, height are the same as the Camera WC
+    this.mFieldBounds[0] = new BoundingBox([50, 0], 100, 3); // bottom
+    this.mFieldBounds[1] = new BoundingBox([50, 80], 100, 3); // top
+    this.mFieldBounds[2] = new BoundingBox([100, 40], 3, 80); // right
+    this.mFieldBounds[3] = new BoundingBox([0, 40], 3, 80); // left
+
     // Score Reporting Font Renderable
     this.mMsg = new FontRenderable("Score 0 - 0");
     this.mMsg.setColor([0, 0, 0, 1]);
@@ -111,6 +151,11 @@ MyGame.prototype.draw = function () {
     this.mHeroCar.draw(this.mCamera);
     this.mEnemyCar.draw(this.mCamera);
     
+    this.mGoals[0].draw(this.mCamera);
+    this.mGoals[1].draw(this.mCamera);
+
+    this.mBall.draw(this.mCamera);
+
     this.mMsg.draw(this.mCamera);
 };
 
@@ -122,8 +167,40 @@ MyGame.prototype.update = function () {
         // Use Booster on Space Press
     }
     
+    var mouseX = this.mCamera.mouseWCX();
+    var mouseY = this.mCamera.mouseWCY();
+    if (gEngine.Input.isButtonClicked(0)) {
+        // shoot() is in MyGame_Bounds.js
+        this.shoot(mouseX, mouseY);
+    }
+
+    if (this.mBall.getBBox().intersectsBound(this.mGoals[0].getBBox())) {
+        this.mHeroCar.score();
+        this.mBall.getXform().setPosition(50, 40);
+        this.mBall.getRigidBody().setVelocity(0, 0);
+    }
+
+    if (this.mBall.getBBox().intersectsBound(this.mGoals[1].getBBox())) {
+        this.mEnemyCar.score();
+        this.mBall.getXform().setPosition(50, 40);
+        this.mBall.getRigidBody().setVelocity(0, 0);
+    }
+
+    for (var i = 0; i < this.mFieldBounds.size; i++) {
+        if (this.mBall.getBBox().intersectsBound(this.mFieldBounds[i])) {
+            // reverse velocity of Ball to bounce off the wall
+            this.mBall.getRigidBody().flipVelocity();
+        }
+        if (this.mHeroCar.getBBox().intersectsBound(this.mFieldBounds[i])) {
+            // set velocity to to 0
+            this.mHeroCar.getRigidBody().setVelocity(0, 0);
+        }
+    }
+
     // use this physics function for collisions
-    // gEngine.Physics.processCollision(this.mAllObjs, this.mCollisionInfos);
+    gEngine.Physics.processCollision(this.mAllObjs, this.mCollisionInfos);
+
+    this.mAllObjs.update(this.mCamera); // very important line!! Don't  remove this
 
     // Update Scoring
     var msg = "Score " + this.mHeroCar.getScore() + " - " + this.mEnemyCar.getScore();

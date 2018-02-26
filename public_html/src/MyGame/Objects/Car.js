@@ -14,6 +14,11 @@ function Car(spriteTexture) {
     // this.mCar.setElementPixelPositions(0, 120, 0, 180);
     GameObject.call(this, this.mCar);
 
+    var r = new RigidCircle(this.getXform(), 5); // size of Xform is 10
+    this.setRigidBody(r);
+    // this.toggleDrawRenderable();
+    this.toggleDrawRigidShape();
+
     this.mScore = 0; // initialize Score to 0
 }
 gEngine.Core.inheritPrototype(Car, GameObject);
