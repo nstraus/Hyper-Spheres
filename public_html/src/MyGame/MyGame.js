@@ -22,6 +22,7 @@ function MyGame() {
     this.kPlatformTexture = "assets/platform.png";
     this.kWallTexture = "assets/wall.png";
     this.kTargetTexture = "assets/target.png";
+    this.kGrass = "assets/Grass.png";
 
     /* GameObjects */
     // HeroCar
@@ -62,7 +63,7 @@ function MyGame() {
     this.mMsg = null;
 
     // Background (Field + Stands?)
-
+    this.mBG = null;
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
 
@@ -75,6 +76,7 @@ MyGame.prototype.loadScene = function () {
     gEngine.Textures.loadTexture(this.kPlatformTexture);
     gEngine.Textures.loadTexture(this.kWallTexture);
     gEngine.Textures.loadTexture(this.kTargetTexture);
+    gEngine.Textures.loadTexture(this.kGrass);
 
 
 };
@@ -87,6 +89,7 @@ MyGame.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kPlatformTexture);
     gEngine.Textures.unloadTexture(this.kWallTexture);
     gEngine.Textures.unloadTexture(this.kTargetTexture);
+    gEngine.Textures.unloadTexture(this.kGrass);
 
 };
 
@@ -131,6 +134,8 @@ MyGame.prototype.initialize = function () {
     let textXForm = this.mMsg.getXform();
     this.mMsg.setTextHeight(3);
     textXForm.setPosition(0 - textXForm.getWidth()/2, 45);
+
+    this.mBG = new LevelBackground(this.kGrass);
 };
 
 // This is the draw function, make sure to setup proper drawing environment, and more
@@ -141,6 +146,8 @@ MyGame.prototype.draw = function () {
 
     this.mCamera.setupViewProjection();
 
+    this.mBG.draw(this.mCamera); // draw Background first so everything else will be displayed over it
+
     this.mHeroCar.draw(this.mCamera);
     this.mEnemyCar.draw(this.mCamera);
 
@@ -150,6 +157,7 @@ MyGame.prototype.draw = function () {
     this.mBall.draw(this.mCamera);
 
     this.mMsg.draw(this.mCamera);
+
 };
 
 // The Update function, updates the application state. Make sure to _NOT_ draw
@@ -191,7 +199,7 @@ MyGame.prototype.update = function () {
     // use this physics function for collisions
     gEngine.Physics.processCollision(this.mAllObjs, this.mCollisionInfos);
 
-    this.mAllObjs.update(this.mCamera); // very important line!! Don't  remove this
+    this.mAllObjs.update(this.mCamera); // very important line!! Don't remove this
 
     // Update Scoring
     var msg = "Score " + this.mHeroCar.getScore() + " - " + this.mEnemyCar.getScore();
