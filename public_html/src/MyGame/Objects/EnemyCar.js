@@ -1,6 +1,6 @@
 /*
 * EnemyCar.js
-* 
+*
 */
 
 "use strict";
@@ -10,7 +10,7 @@ function EnemyCar(spriteTexture) {
 
     Car.call(this, spriteTexture);
 
-    this.getXform().setPosition(20, 30); // move init position so that it's not the same as HeroCar
+    this.getXform().setPosition(50, 0); // move init position so that it's not the same as HeroCar
 
 
 }

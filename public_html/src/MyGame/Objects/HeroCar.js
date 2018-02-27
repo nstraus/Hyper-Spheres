@@ -1,4 +1,4 @@
-/* File: HeroCar.js 
+/* File: HeroCar.js
  *
  * Creates and initializes the HeroCar (Dye)
  * overrides the update function of GameObject to define
@@ -18,7 +18,9 @@ function HeroCar(spriteTexture) {
     // Boosters that the car has picked up
 
     Car.call(this, spriteTexture);
-    
+
+    this.getXform().setPosition(-50, 0); // move init position so that it's not the same as HeroCar
+
     /*
     var r = new RigidRectangle(this.getXform(), 3, 4);
     this.setRigidBody(r);
@@ -34,4 +36,3 @@ HeroCar.prototype.update = function () {
 };
 
 // HeroCar.prototype.draw = fumction () { // implement this };
-

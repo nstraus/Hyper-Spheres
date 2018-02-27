@@ -1,20 +1,20 @@
 /*
 * Car.js
-* 
+*
 */
 
 "use strict";
 
 function Car(spriteTexture) {
-	
+
 	this.mCar = new TextureRenderable(spriteTexture);
     this.mCar.setColor([1, 1, 1, 0]);
-    this.mCar.getXform().setPosition(50, 40);
-    this.mCar.getXform().setSize(10, 10);
+    this.mCar.getXform().setPosition(0, 0);
+    this.mCar.getXform().setSize(5, 5);
     // this.mCar.setElementPixelPositions(0, 120, 0, 180);
     GameObject.call(this, this.mCar);
 
-    var r = new RigidCircle(this.getXform(), 5); // size of Xform is 10
+    var r = new RigidCircle(this.getXform(), 2.5); // size of Xform is 10
     this.setRigidBody(r);
     // this.toggleDrawRenderable();
     this.toggleDrawRigidShape();

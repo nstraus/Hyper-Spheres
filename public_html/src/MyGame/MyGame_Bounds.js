@@ -1,6 +1,6 @@
 /*
- * File: MyGame.js 
- * This is the logic of our game. 
+ * File: MyGame.js
+ * This is the logic of our game.
  */
 
 /*jslint node: true, vars: true */
@@ -25,45 +25,22 @@ MyGame.prototype.radomizeVelocity = function()
 };
 
 MyGame.prototype.createBounds = function() {
-    var x = 15, w = 30, y = 4;
-    for (x = 15; x < 120; x+=30) 
-        this.platformAt(x, y, w, 0);
-    y = 76;
-    for (x = 15; x < 120; x+=30) 
-        this.platformAt(x, y, w, 180);
-    
-    /*
-    this.platformAt(40, 40, 20, -30);
-    this.platformAt(60, 30, 20, 0);
-    this.platformAt(20, 20, 20, 0);
-    this.platformAt(70, 50, 20, 0);
-    */
-    
-    x = 2;
-    w = 3;
-    for (y = 8; y < 90; y+=12) 
-        this.wallAt(x, y, w);
-    x = 98;
-    for (y = 8; y < 90; y+=12) 
-        this.wallAt(x, y, w);
-    
-    var r = new TextureRenderable(this.kTargetTexture);
-    this.mTarget = new GameObject(r);
-    var xf = r.getXform();
-    xf.setSize(3, 3);
+    this.wallAt(-100, 0, 3, 100); // Left
+    this.wallAt(100, 0, 3, 100); // Right
+    this.wallAt(0, 50, 200, 3); // Top
+    this.wallAt(0, -50, 200, 3); // Bottom
 };
 
-MyGame.prototype.wallAt = function (x, y, w) {
-    var h = w * 4;
+MyGame.prototype.wallAt = function (x, y, w, h) {
     var p = new TextureRenderable(this.kWallTexture);
     var xf = p.getXform();
-    
+
     var g = new GameObject(p);
     var r = new RigidRectangle(xf, w, h);
     g.setRigidBody(r);
     g.toggleDrawRenderable();
     g.toggleDrawRigidShape();
-    
+
     r.setMass(0);
     xf.setSize(w, h);
     xf.setPosition(x, y);
@@ -74,13 +51,13 @@ MyGame.prototype.platformAt = function (x, y, w, rot) {
     var h = w / 8;
     var p = new TextureRenderable(this.kPlatformTexture);
     var xf = p.getXform();
-    
+
     var g = new GameObject(p);
     var r = new RigidRectangle(xf, w, h);
     g.setRigidBody(r);
     g.toggleDrawRenderable();
     g.toggleDrawRigidShape();
-    
+
     r.setMass(0);
     xf.setSize(w, h);
     xf.setPosition(x, y);
@@ -88,14 +65,9 @@ MyGame.prototype.platformAt = function (x, y, w, rot) {
     this.mAllObjs.addToSet(g);
 };
 
-MyGame.prototype.shoot = function(mouseX, mouseY) {
-    var i = 0;
-    for (i = 0; i < 1; i++) { // first object in this.mAllObs is the HeroCar
-        var obj = this.mAllObjs.getObjectAt(i);
-        var rigidShape = obj.getRigidBody();
-        var differenceX = mouseX - obj.getXform().getXPos();
-        var differenceY = mouseY - obj.getXform().getYPos();
-        rigidShape.setVelocity(differenceX, differenceY);
-    }
+MyGame.prototype.movePlayer = function(mouseX, mouseY, obj) {
+      var rigidShape = obj.getRigidBody();
+      var differenceX = mouseX - obj.getXform().getXPos();
+      var differenceY = mouseY - obj.getXform().getYPos();
+      rigidShape.setVelocity(differenceX, differenceY);
 };
-    
