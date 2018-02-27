@@ -23,6 +23,7 @@ function MyGame() {
     this.kWallTexture = "assets/wall.png";
     this.kTargetTexture = "assets/target.png";
     this.kGrass = "assets/Grass.png";
+    this.kBall = "assets/Ball.png";
 
     /* GameObjects */
     // HeroCar
@@ -77,6 +78,7 @@ MyGame.prototype.loadScene = function () {
     gEngine.Textures.loadTexture(this.kWallTexture);
     gEngine.Textures.loadTexture(this.kTargetTexture);
     gEngine.Textures.loadTexture(this.kGrass);
+    gEngine.Textures.loadTexture(this.kBall);
 
 
 };
@@ -90,6 +92,7 @@ MyGame.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kWallTexture);
     gEngine.Textures.unloadTexture(this.kTargetTexture);
     gEngine.Textures.unloadTexture(this.kGrass);
+    gEngine.Textures.unloadTexture(this.kBall);
 
 };
 
@@ -111,7 +114,7 @@ MyGame.prototype.initialize = function () {
     this.mEnemyCar = new EnemyCar(this.kGreenCar);
 
     // Ball
-    this.mBall = new Ball(this.kRedCar); // find a texture for this
+    this.mBall = new Ball(this.kBall);
 
     // Goals
     this.mGoals[0] = new Goal(this.kRedCar, true); // left side of viewport // find a texture for this
@@ -170,6 +173,8 @@ MyGame.prototype.update = function () {
 
     var mouseX = this.mCamera.mouseWCX();
     var mouseY = this.mCamera.mouseWCY();
+
+    this.mBall.getRenderable().updateAnimation();
 
     let ballXForm = this.mBall.getXform();
     this.movePlayer(ballXForm.getXPos(), ballXForm.getYPos(), this.mAllObjs.getObjectAt(1));
