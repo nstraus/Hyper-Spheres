@@ -8,6 +8,8 @@
 
 function Boosters() {
 	// implement this
+
+	GameObjectSet.call(this);
 }
 gEngine.Core.inheritPrototype(Boosters, GameObjectSet);
 

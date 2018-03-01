@@ -30,6 +30,8 @@ function Ball(spriteTexture) {
 }
 gEngine.Core.inheritPrototype(Ball, GameObject);
 
-// Ball.prototype.update = function() { // implement this };
+Ball.prototype.update = function() {
+    this.getRenderable().updateAnimation();
+};
 
 // Ball.prototype.draw = function() { // implement this };

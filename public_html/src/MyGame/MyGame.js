@@ -25,6 +25,9 @@ function MyGame() {
     this.kGrass = "assets/Grass.png";
     this.kBall = "assets/Ball.png";
 
+    // pick an Obstacle Texture that isn't the platform.png
+    this.kObstacle = "assets/platform.png";
+
     /* GameObjects */
     // HeroCar
     this.mHeroCar = null;
@@ -65,6 +68,13 @@ function MyGame() {
 
     // Background (Field + Stands?)
     this.mBG = null;
+
+    // Coordinate Systems
+    this.kWCWidth = 200;
+    this.kViewportWidth = 1200;
+    this.kViewportHeight = 600;
+    this.kWCHeight = this.kViewportHeight * (this.kWCWidth / this.kViewportWidth);
+
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
 
@@ -79,6 +89,7 @@ MyGame.prototype.loadScene = function () {
     gEngine.Textures.loadTexture(this.kTargetTexture);
     gEngine.Textures.loadTexture(this.kGrass);
     gEngine.Textures.loadTexture(this.kBall);
+    gEngine.Textures.loadTexture(this.kObstacle);
 
 
 };
@@ -93,6 +104,7 @@ MyGame.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kTargetTexture);
     gEngine.Textures.unloadTexture(this.kGrass);
     gEngine.Textures.unloadTexture(this.kBall);
+    gEngine.Textures.unloadTexture(this.kObstacle);
 
 };
 
@@ -101,8 +113,8 @@ MyGame.prototype.initialize = function () {
     // and the size of each GameObject in relation to World Coordinates
     this.mCamera = new Camera(
         vec2.fromValues(0, 0), // position of the camera
-        200,                     // width of camera
-        [0, 0, 1200, 600]         // viewport (orgX, orgY, width, height)
+        this.kWCWidth,                     // width of camera
+        [0, 0, this.kViewportWidth, this.kViewportHeight] // viewport (orgX, orgY, width, height)
     );
     this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
             // sets the background to gray
@@ -121,11 +133,15 @@ MyGame.prototype.initialize = function () {
 
     this.mGoals[1] = new Goal(this.kRedCar, false); // right side of viewport // find a texture for this
 
+    // Obstacles
+    this.mObstacles = new Obstacles(this.kObstacle, this.kWCWidth, this.kWCHeight); // spriteSheet with Obstacles on it 
+
     // AllObjs Array for Physics Collisions
     this.mAllObjs = new GameObjectSet();
     this.mAllObjs.addToSet(this.mHeroCar);
     this.mAllObjs.addToSet(this.mEnemyCar);
     this.mAllObjs.addToSet(this.mBall);
+
     // this.mAllObjs.addToSet(this.mGoals[0]); this lets the Goals get pushed around with Engine.processCollisions
     // this.mAllObjs.addToSet(this.mGoals[1]);
 
@@ -159,6 +175,8 @@ MyGame.prototype.draw = function () {
 
     this.mBall.draw(this.mCamera);
 
+    this.mObstacles.draw(this.mCamera);
+
     this.mMsg.draw(this.mCamera);
 
 };
@@ -173,8 +191,6 @@ MyGame.prototype.update = function () {
 
     var mouseX = this.mCamera.mouseWCX();
     var mouseY = this.mCamera.mouseWCY();
-
-    this.mBall.getRenderable().updateAnimation();
 
     let ballXForm = this.mBall.getXform();
     this.movePlayer(ballXForm.getXPos(), ballXForm.getYPos(), this.mAllObjs.getObjectAt(1));
@@ -201,10 +217,17 @@ MyGame.prototype.update = function () {
         this.mBall.getRigidBody().setVelocity(0, 0);
     }
 
-    // use this physics function for collisions
-    gEngine.Physics.processCollision(this.mAllObjs, this.mCollisionInfos);
+    // Pixel_Collision for the Obstacles
+    this.mObstacles.collide(this.mBall);
+    this.mObstacles.collide(this.mHeroCar);
+    this.mObstacles.collide(this.mEnemyCar);
+
+    this.mObstacles.update();
 
     this.mAllObjs.update(this.mCamera); // very important line!! Don't remove this
+
+    // use this physics function for collisions
+    gEngine.Physics.processCollision(this.mAllObjs, this.mCollisionInfos);
 
     // Update Scoring
     var msg = "Score " + this.mHeroCar.getScore() + " - " + this.mEnemyCar.getScore();
