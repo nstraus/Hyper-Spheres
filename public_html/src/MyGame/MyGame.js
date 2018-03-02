@@ -55,12 +55,12 @@ function MyGame() {
     /* Cameras */
     // Main camera
     this.mCamera = null;
+    this.mZoomCam = null;
+    this.mMinimapCam = null;
+    this.kViewType = null;
 
     // AllObjects Array for Physics Collisions
     this.mAllObjs = null;
-
-    // Field Minimap camera
-
 
     /* UI Components and FontRenderables */
     // Score
@@ -117,6 +117,24 @@ MyGame.prototype.initialize = function () {
         [0, 0, this.kViewportWidth, this.kViewportHeight] // viewport (orgX, orgY, width, height)
     );
     this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
+
+    // Zoomed camera with minimap setup
+    this.mZoomCam = new Camera(
+        vec2.fromValues(0, 0), // position of the camera
+        this.kWCWidth / 3,                     // width of camera
+        [0, 0, this.kViewportWidth, this.kViewportHeight] // viewport (orgX, orgY, width, height)
+    );
+    this.mZoomCam.setBackgroundColor([0.8, 0.8, 0.8, 1]);
+
+    this.mMinimapCam = new Camera(
+        vec2.fromValues(0, 0), // position of the camera
+        this.kWCWidth,                     // width of camera
+        [this.kViewportWidth / 3, 0, this.kViewportWidth / 3, this.kViewportHeight / 3] // viewport (orgX, orgY, width, height)
+    );
+    this.mMinimapCam.setBackgroundColor([1, 0, 1, 0]);
+
+    this.kViewType = 0;
+
             // sets the background to gray
     gEngine.DefaultResources.setGlobalAmbientIntensity(3);
 
@@ -134,7 +152,7 @@ MyGame.prototype.initialize = function () {
     this.mGoals[1] = new Goal(this.kRedCar, false); // right side of viewport // find a texture for this
 
     // Obstacles
-    this.mObstacles = new Obstacles(this.kObstacle, this.kWCWidth, this.kWCHeight); // spriteSheet with Obstacles on it 
+    this.mObstacles = new Obstacles(this.kObstacle, this.kWCWidth, this.kWCHeight); // spriteSheet with Obstacles on it
 
     // AllObjs Array for Physics Collisions
     this.mAllObjs = new GameObjectSet();
@@ -163,21 +181,24 @@ MyGame.prototype.draw = function () {
     // Clear the canvas
     gEngine.Core.clearCanvas([0.9, 0.9, 0.9, 1.0]); // clear to light gray
 
-    this.mCamera.setupViewProjection();
+    let camToRender = this.kViewType ? this.mCamera : this.mZoomCam;
 
-    this.mBG.draw(this.mCamera); // draw Background first so everything else will be displayed over it
+    camToRender.setupViewProjection(1);
 
-    this.mHeroCar.draw(this.mCamera);
-    this.mEnemyCar.draw(this.mCamera);
+    this.mBG.draw(camToRender); // draw Background first so everything else will be displayed over it
+    this.mGoals[0].draw(camToRender);
+    this.mGoals[1].draw(camToRender);
+    this.mObstacles.draw(camToRender);
+    this.mAllObjs.draw(camToRender);
+    this.mMsg.draw(camToRender);
 
-    this.mGoals[0].draw(this.mCamera);
-    this.mGoals[1].draw(this.mCamera);
-
-    this.mBall.draw(this.mCamera);
-
-    this.mObstacles.draw(this.mCamera);
-
-    this.mMsg.draw(this.mCamera);
+    if (!this.kViewType) {
+      this.mMinimapCam.setupViewProjection(0); // 0 makes it so the canvas is not cleared for the minimap portion
+      this.mGoals[0].draw(this.mMinimapCam);
+      this.mGoals[1].draw(this.mMinimapCam);
+      this.mObstacles.draw(this.mMinimapCam);
+      this.mAllObjs.draw(this.mMinimapCam);
+    }
 
 };
 
@@ -189,8 +210,9 @@ MyGame.prototype.update = function () {
         // Use Booster on Space Press
     }
 
-    var mouseX = this.mCamera.mouseWCX();
-    var mouseY = this.mCamera.mouseWCY();
+    let shownCam = this.kViewType ? this.mCamera : this.mZoomCam;
+    var mouseX = shownCam.mouseWCX();
+    var mouseY = shownCam.mouseWCY();
 
     let ballXForm = this.mBall.getXform();
     this.movePlayer(ballXForm.getXPos(), ballXForm.getYPos(), this.mAllObjs.getObjectAt(1));
@@ -203,6 +225,10 @@ MyGame.prototype.update = function () {
     // Press P to test enemy movement
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.E)) {
         this.movePlayer(mouseX, mouseY, this.mAllObjs.getObjectAt(1));
+    }
+
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.V)) {
+        this.kViewType = !this.kViewType;
     }
 
     if (this.mBall.getBBox().intersectsBound(this.mGoals[0].getBBox())) {
@@ -232,5 +258,8 @@ MyGame.prototype.update = function () {
     // Update Scoring
     var msg = "Score " + this.mHeroCar.getScore() + " - " + this.mEnemyCar.getScore();
     this.mMsg.setText(msg);
+
+    this.mZoomCam.panTo(this.mHeroCar.getXform().getXPos(), this.mHeroCar.getXform().getYPos());
+    this.mZoomCam.update();
 
 };

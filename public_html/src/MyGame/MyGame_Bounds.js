@@ -66,7 +66,7 @@ MyGame.prototype.platformAt = function (x, y, w, rot) {
 };
 
 MyGame.prototype.movePlayer = function(mouseX, mouseY, obj) {
-  var velMultiplier = 1;
+  var velMultiplier = 4;
   var rigidShape = obj.getRigidBody();
   var differenceX = mouseX - obj.getXform().getXPos();
   var differenceY = mouseY - obj.getXform().getYPos();
