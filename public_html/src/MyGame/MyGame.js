@@ -133,7 +133,7 @@ MyGame.prototype.initialize = function () {
     );
     this.mMinimapCam.setBackgroundColor([1, 0, 1, 0]);
 
-    this.kViewType = 0;
+    this.kViewType = false;
 
             // sets the background to gray
     gEngine.DefaultResources.setGlobalAmbientIntensity(3);
@@ -227,7 +227,7 @@ MyGame.prototype.update = function () {
         this.movePlayer(mouseX, mouseY, this.mAllObjs.getObjectAt(1));
     }
 
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.V)) {
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.V)) {
         this.kViewType = !this.kViewType;
     }
 
