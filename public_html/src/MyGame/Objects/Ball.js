@@ -32,6 +32,7 @@ gEngine.Core.inheritPrototype(Ball, GameObject);
 
 Ball.prototype.update = function() {
     this.getRenderable().updateAnimation();
+		GameObject.prototype.update.call(this);
 };
 
 // Ball.prototype.draw = function() { // implement this };
