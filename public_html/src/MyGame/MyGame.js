@@ -121,7 +121,7 @@ MyGame.prototype.initialize = function () {
     // Zoomed camera with minimap setup
     this.mZoomCam = new Camera(
         vec2.fromValues(0, 0), // position of the camera
-        this.kWCWidth / 3,                     // width of camera
+        this.kWCWidth / 2,                     // width of camera
         [0, 0, this.kViewportWidth, this.kViewportHeight] // viewport (orgX, orgY, width, height)
     );
     this.mZoomCam.setBackgroundColor([0.8, 0.8, 0.8, 1]);
@@ -258,6 +258,9 @@ MyGame.prototype.update = function () {
     // Update Scoring
     var msg = "Score " + this.mHeroCar.getScore() + " - " + this.mEnemyCar.getScore();
     this.mMsg.setText(msg);
+    let center = shownCam.getWCCenter();
+    this.mMsg.getXform().setPosition(center[0] - this.mMsg.getXform().getWidth()/2, center[1] + shownCam.getWCHeight() * 2 / 5);
+
 
     this.mZoomCam.panTo(this.mHeroCar.getXform().getXPos(), this.mHeroCar.getXform().getYPos());
     this.mZoomCam.update();

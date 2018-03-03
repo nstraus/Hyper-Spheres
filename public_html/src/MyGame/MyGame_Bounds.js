@@ -39,7 +39,6 @@ MyGame.prototype.wallAt = function (x, y, w, h) {
     var r = new RigidRectangle(xf, w, h);
     g.setRigidBody(r);
     g.toggleDrawRenderable();
-    g.toggleDrawRigidShape();
 
     r.setMass(0);
     xf.setSize(w, h);
