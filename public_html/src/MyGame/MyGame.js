@@ -26,6 +26,11 @@ function MyGame(carColor) {
     this.kTargetTexture = "assets/target.png";
     this.kGrass = "assets/Grass.png";
     this.kBall = "assets/Ball.png";
+    
+    /* Audio */
+    this.kSong = "assets/In-House.wav";
+    this.kPlayerGoal = "assets/PlayerGoal.wav";
+    this.kEnemyGoal = "assets/EnemyGoal.wav";
 
     // pick an Obstacle Texture that isn't the platform.png
     this.kObstacle = "assets/platform.png";
@@ -80,6 +85,8 @@ function MyGame(carColor) {
     this.kMaxScore = 5;
 
     // Timer
+    this.t0 = 0;
+    this.end = 0;
     // FontRenderable that displays how long the match has been running
 
 }
@@ -101,7 +108,10 @@ MyGame.prototype.loadScene = function (sceneParams) {
     gEngine.Textures.loadTexture(this.kBall);
     gEngine.Textures.loadTexture(this.kObstacle);
 
-
+    // Load Audio
+    gEngine.AudioClips.loadAudio(this.kSong);
+    gEngine.AudioClips.loadAudio(this.kPlayerGoal);
+    gEngine.AudioClips.loadAudio(this.kEnemyGoal);
 };
 
 MyGame.prototype.unloadScene = function () {
@@ -118,6 +128,12 @@ MyGame.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kGrass);
     gEngine.Textures.unloadTexture(this.kBall);
     gEngine.Textures.unloadTexture(this.kObstacle);
+    
+    // Stop Audio
+    gEngine.AudioClips.stopBackgroundAudio();
+    gEngine.AudioClips.unloadAudio(this.kSong);
+    gEngine.AudioClips.unloadAudio(this.kPlayerGoal);
+    gEngine.AudioClips.unloadAudio(this.kEnemyGoal);
 
     var nextLevel = new WinLoss(this.mHeroCar.getScore(), this.mEnemyCar.getScore(), this.mHeroCar, this.mEnemyCar); // load next level, pass the score parameters here
     gEngine.Core.startScene(nextLevel);
@@ -188,6 +204,9 @@ MyGame.prototype.initialize = function () {
     textXForm.setPosition(0 - textXForm.getWidth()/2, 45);
 
     this.mBG = new LevelBackground(this.kGrass);
+    
+    // Start the background audio.
+    gEngine.AudioClips.playBackgroundAudio(this.kSong);
 };
 
 // This is the draw function, make sure to setup proper drawing environment, and more
@@ -221,6 +240,12 @@ MyGame.prototype.draw = function () {
 // anything from this function!
 MyGame.prototype.update = function () {
 
+    // Starting the timer.
+    if (this.t0 === 0)
+    {
+        this.t0 = new Date();
+    }
+    
     if (this.mHeroCar.getScore() >= this.kMaxScore) {
         gEngine.GameLoop.stop();
     }
@@ -242,17 +267,34 @@ MyGame.prototype.update = function () {
     var mouseX = shownCam.mouseWCX();
     var mouseY = shownCam.mouseWCY();
 
-    let ballXForm = this.mBall.getXform();
-    this.movePlayer(ballXForm.getXPos(), ballXForm.getYPos(), this.mAllObjs.getObjectAt(1));
+    // Enemy car lunges towards the ball every second.
+    if (this.millisecondsElapsed > 1000)
+    {
+        let ballXForm = this.mBall.getXform();
+        // If the enemy car is near the ball, it uses more force.
+        if (Math.abs(this.mAllObjs.getObjectAt(1).getXform().getXPos()- ballXForm.getXPos() < 20) &&
+            Math.abs(this.mAllObjs.getObjectAt(1).getXform().getYPos()- ballXForm.getYPos() < 20))
+        {
+            this.movePlayer(ballXForm.getXPos(), ballXForm.getYPos(), 4, this.mAllObjs.getObjectAt(1));
+        }
+        else
+        {
+            this.movePlayer(ballXForm.getXPos(), ballXForm.getYPos(), 1, this.mAllObjs.getObjectAt(1));
+        }
+        // Resetting timer.
+        this.millisecondsElapsed = 0;
+        this.t0 = new Date();
+        this.end  = 0;
+    }
 
     // Left click to move player
-    if (gEngine.Input.isButtonPressed(0)) {
-        this.movePlayer(mouseX, mouseY, this.mAllObjs.getObjectAt(0));
+    if (gEngine.Input.isButtonClicked(0)) {
+        this.movePlayer(mouseX, mouseY, 2, this.mAllObjs.getObjectAt(0));
     }
 
     // Press P to test enemy movement
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.E)) {
-        this.movePlayer(mouseX, mouseY, this.mAllObjs.getObjectAt(1));
+        this.movePlayer(mouseX, mouseY, 4, this.mAllObjs.getObjectAt(1));
     }
 
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.V)) {
@@ -260,15 +302,25 @@ MyGame.prototype.update = function () {
     }
 
     if (this.mBall.getBBox().intersectsBound(this.mGoals[0].getBBox())) {
-        this.mHeroCar.score();
+        this.mEnemyCar.score();
+        gEngine.AudioClips.playACue(this.kEnemyGoal);
         this.mBall.getXform().setPosition(0, 0);
         this.mBall.getRigidBody().setVelocity(0, 0);
+        this.mAllObjs.getObjectAt(1).getXform().setPosition(50, 0);
+        this.mAllObjs.getObjectAt(1).getRigidBody().setVelocity(0, 0);
+        this.mAllObjs.getObjectAt(0).getXform().setPosition(-50, 0);
+        this.mAllObjs.getObjectAt(0).getRigidBody().setVelocity(0, 0);
     }
 
     if (this.mBall.getBBox().intersectsBound(this.mGoals[1].getBBox())) {
-        this.mEnemyCar.score();
+        this.mHeroCar.score();
+        gEngine.AudioClips.playACue(this.kPlayerGoal);
         this.mBall.getXform().setPosition(0, 0);
         this.mBall.getRigidBody().setVelocity(0, 0);
+        this.mAllObjs.getObjectAt(1).getXform().setPosition(50, 0);
+        this.mAllObjs.getObjectAt(1).getRigidBody().setVelocity(0, 0);
+        this.mAllObjs.getObjectAt(0).getXform().setPosition(-50, 0);
+        this.mAllObjs.getObjectAt(0).getRigidBody().setVelocity(0, 0);
     }
 
     // Pixel_Collision for the Obstacles
@@ -292,5 +344,9 @@ MyGame.prototype.update = function () {
 
     this.mZoomCam.panTo(this.mHeroCar.getXform().getXPos(), this.mHeroCar.getXform().getYPos());
     this.mZoomCam.update();
+    
+    // For the timer.
+    this.end = new Date();
+    this.millisecondsElapsed = this.end - this.t0;
 
 };
