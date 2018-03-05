@@ -13,11 +13,11 @@
 
 function HeroCar(spriteTexture) {
 
-    // implement this
-
     // Boosters that the car has picked up
 
     Car.call(this, spriteTexture);
+
+    this.kSpriteTexture = spriteTexture;
 
     this.getXform().setPosition(-50, 0); // move init position so that it's not the same as HeroCar
 
@@ -34,5 +34,9 @@ gEngine.Core.inheritPrototype(HeroCar, Car);
 HeroCar.prototype.update = function () {
     GameObject.prototype.update.call(this);
 };
+
+HeroCar.prototype.getTexture = function() {
+    return this.kSpriteTexture;
+}
 
 // HeroCar.prototype.draw = fumction () { // implement this };

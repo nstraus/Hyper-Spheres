@@ -5,7 +5,7 @@
 
 "use strict";
 
-function WinLoss(heroScore, enemyScore) {
+function WinLoss(heroScore, enemyScore, hero, enemy) {
 
 	this.kHeroScore = heroScore;
 	this.kEnemyScore = enemyScore;
@@ -14,12 +14,23 @@ function WinLoss(heroScore, enemyScore) {
 
 	this.kBackground = "assets/SkyGrass.png";
 	this.kPlayAgain = "assets/ButtonRedPurp.png";
+	this.kPodium = "assets/Podium.png";
 
 	this.mPodium = null;
 
-	this.mWinnerCar = null;
+	this.mWinnerCar;
+	this.mLoserCar;
 
-	this.mLoserCar = null;
+	if (heroScore > enemyScore) {
+		this.mWinnerCar = hero;
+		this.mLoserCar = enemy;
+	} else {
+		this.mWinnerCar = enemy;
+		this.mLoserCar = hero;
+	}
+
+	this.kWinnerTexture = this.mWinnerCar.getTexture();
+	this.kLoserTexture = this.mLoserCar.getTexture();
 
 	this.mConfetti = null; // particle system optional
 
@@ -53,6 +64,10 @@ WinLoss.prototype.loadScene = function(sceneParams) {
 	// load Textures
 	gEngine.Textures.loadTexture(this.kBackground);
 	gEngine.Textures.loadTexture(this.kPlayAgain);
+	gEngine.Textures.loadTexture(this.kPodium);
+	gEngine.Textures.loadTexture(this.kWinnerTexture);
+	gEngine.Textures.loadTexture(this.kLoserTexture);
+
 };
 
 WinLoss.prototype.unloadScene = function() {
@@ -62,6 +77,9 @@ WinLoss.prototype.unloadScene = function() {
 	// unload Textures
 	gEngine.Textures.unloadTexture(this.kBackground);
 	gEngine.Textures.unloadTexture(this.kPlayAgain);
+	gEngine.Textures.unloadTexture(this.kPodium);
+	gEngine.Textures.unloadTexture(this.kWinnerTexture);
+	gEngine.Textures.unloadTexture(this.kLoserTexture);
 
 	var nextLevel = new Splash(); // load NextLevel, could pass HighScore as a param for this session
 	gEngine.Core.startScene(nextLevel);
@@ -81,14 +99,23 @@ WinLoss.prototype.initialize = function() {
 
 	if (this.kHeroScore > this.kEnemyScore) {
 		this.mResultText = new FontRenderable("You Won!");
-		// put Hero at top of podium
-		// put enemy at bottom of podium
 		// confetti?
 	} else {
 		this.mResultText = new FontRenderable("You Lose ...");
-		// put Hero at bottom of podium
-		// put Enemy at top of podium
 	}
+
+	// set position of winner car
+	this.mWinnerCar.getRenderable().getXform().setPosition(-40, 10);
+	this.mWinnerCar.getRenderable().getXform().setSize(20, 20);
+	this.mWinnerCar.getRenderable().getXform().setRotationInDegree(0);
+	this.mWinnerCar.toggleDrawRigidShape();
+
+	// set position of loser car
+	this.mLoserCar.getRenderable().getXform().setPosition(-17, -12);
+	this.mLoserCar.getRenderable().getXform().setSize(20, 20);
+	this.mLoserCar.getRenderable().getXform().setRotationInDegree(0);
+	this.mLoserCar.toggleDrawRigidShape();
+
 	this.mResultText.setColor([0, 0, 0, 1]);
 	this.mResultText.getXform().setPosition(-40, 40);
 	this.mResultText.setTextHeight(7);
@@ -98,6 +125,11 @@ WinLoss.prototype.initialize = function() {
 	this.mScoreText.setColor([0, 0, 0, 1]);
 	this.mScoreText.getXform().setPosition(-70, 30);
 	this.mScoreText.setTextHeight(7);
+
+	this.mPodium = new TextureRenderable(this.kPodium);
+	this.mPodium.setColor([1, 1, 1, 0]);
+	this.mPodium.getXform().setPosition(-20, -10);
+	this.mPodium.getXform().setSize(160, 80);
 
 };
 
@@ -124,4 +156,10 @@ WinLoss.prototype.draw = function() {
 	this.mScoreText.draw(this.mCamera);
 
 	this.mResultText.draw(this.mCamera);
+
+	this.mPodium.draw(this.mCamera);
+
+	this.mWinnerCar.draw(this.mCamera);
+
+	this.mLoserCar.draw(this.mCamera);
 };

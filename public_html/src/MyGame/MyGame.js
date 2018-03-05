@@ -119,7 +119,7 @@ MyGame.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kBall);
     gEngine.Textures.unloadTexture(this.kObstacle);
 
-    var nextLevel = new WinLoss(this.mHeroCar.getScore(), this.mEnemyCar.getScore()); // load next level, pass the score parameters here
+    var nextLevel = new WinLoss(this.mHeroCar.getScore(), this.mEnemyCar.getScore(), this.mHeroCar, this.mEnemyCar); // load next level, pass the score parameters here
     gEngine.Core.startScene(nextLevel);
 
 };
