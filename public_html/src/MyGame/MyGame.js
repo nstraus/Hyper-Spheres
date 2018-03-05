@@ -26,7 +26,7 @@ function MyGame(carColor) {
     this.kTargetTexture = "assets/target.png";
     this.kGrass = "assets/Grass.png";
     this.kBall = "assets/Ball.png";
-    
+
     /* Audio */
     this.kSong = "assets/In-House.wav";
     this.kPlayerGoal = "assets/PlayerGoal.wav";
@@ -128,7 +128,7 @@ MyGame.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kGrass);
     gEngine.Textures.unloadTexture(this.kBall);
     gEngine.Textures.unloadTexture(this.kObstacle);
-    
+
     // Stop Audio
     gEngine.AudioClips.stopBackgroundAudio();
     gEngine.AudioClips.unloadAudio(this.kSong);
@@ -204,7 +204,7 @@ MyGame.prototype.initialize = function () {
     textXForm.setPosition(0 - textXForm.getWidth()/2, 45);
 
     this.mBG = new LevelBackground(this.kGrass);
-    
+
     // Start the background audio.
     gEngine.AudioClips.playBackgroundAudio(this.kSong);
 };
@@ -245,7 +245,7 @@ MyGame.prototype.update = function () {
     {
         this.t0 = new Date();
     }
-    
+
     if (this.mHeroCar.getScore() >= this.kMaxScore) {
         gEngine.GameLoop.stop();
     }
@@ -323,14 +323,15 @@ MyGame.prototype.update = function () {
         this.mAllObjs.getObjectAt(0).getRigidBody().setVelocity(0, 0);
     }
 
-    // Pixel_Collision for the Obstacles
-    this.mObstacles.collide(this.mBall);
-    this.mObstacles.collide(this.mHeroCar);
-    this.mObstacles.collide(this.mEnemyCar);
 
     this.mObstacles.update();
 
     this.mAllObjs.update(this.mCamera); // very important line!! Don't remove this
+
+    // Pixel_Collision for the Obstacles
+    this.mObstacles.collide(this.mBall);
+    this.mObstacles.collide(this.mHeroCar);
+    this.mObstacles.collide(this.mEnemyCar);
 
     // use this physics function for collisions
     gEngine.Physics.processCollision(this.mAllObjs, this.mCollisionInfos);
@@ -344,7 +345,7 @@ MyGame.prototype.update = function () {
 
     this.mZoomCam.panTo(this.mHeroCar.getXform().getXPos(), this.mHeroCar.getXform().getYPos());
     this.mZoomCam.update();
-    
+
     // For the timer.
     this.end = new Date();
     this.millisecondsElapsed = this.end - this.t0;

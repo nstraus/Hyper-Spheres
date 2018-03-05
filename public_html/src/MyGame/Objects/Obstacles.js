@@ -1,6 +1,6 @@
 /*
 * Obstacles.js
-* 
+*
 * A Set of Obstacles
 */
 
@@ -25,7 +25,7 @@ function Obstacles(spriteTexture, wcWidth, wcHeight) {
 gEngine.Core.inheritPrototype(Obstacles, GameObjectSet);
 
 Obstacles.prototype.update = function() {
-	
+
 	var spawnObstacle = null;
 
 	this.mSpawnCounter--; // decrement Spawn Counter
@@ -48,7 +48,7 @@ Obstacles.prototype.spawnObstacle = function() {
 	var posX = (Math.random() - 0.5) * this.kWCWidth; // generate random number for WC x position
 	var posY = (Math.random() - 0.5) * this.kWCHeight; // generate random number for WC y position
 
-	var obstacle = new Obstacle(this.kTexture, [posX, posY]); // 
+	var obstacle = new Obstacle(this.kTexture, [posX, posY]); //
 
 	this.addToSet(obstacle); // create new Obstacle, add to set
 	return obstacle;
@@ -69,8 +69,9 @@ Obstacles.prototype.toggleSpawning = function () {
 
 Obstacles.prototype.collide = function(obj) {
 	for (var i = 0; i < this.mSet.length; i++) {
-		if (this.mSet[i].pixelTouches(obj, [0, 0])) {
+		if (obj.getBBox().intersectsBound(this.mSet[i].getBBox())) {
 			obj.getRigidBody().flipVelocity();
+			obj.update();
 		}
 	}
 }
