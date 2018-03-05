@@ -25,24 +25,31 @@ MyGame.prototype.radomizeVelocity = function()
 };
 
 MyGame.prototype.createBounds = function() {
-    this.wallAt(-100, 0, 3, 100); // Left
-    this.wallAt(100, 0, 3, 100); // Right
-    this.wallAt(0, 50, 200, 3); // Top
-    this.wallAt(0, -50, 200, 3); // Bottom
+    this.wallAt(-100, 0, 90); // Left
+    this.wallAt(100, 0, 90); // Right
+    this.wallAt(0, 50, 0); // Top
+    this.wallAt(0, -50, 0); // Bottom
+
+    this.wallAt(90, -45, 45); // Bottom
+    this.wallAt(90, 45, -45); // Bottom
+    this.wallAt(-90, -45, -45); // Bottom
+    this.wallAt(-90, 45, 45); // Bottom
 };
 
-MyGame.prototype.wallAt = function (x, y, w, h) {
+MyGame.prototype.wallAt = function (x, y, d) {
     var p = new TextureRenderable(this.kWallTexture);
     var xf = p.getXform();
 
     var g = new GameObject(p);
-    var r = new RigidRectangle(xf, w, h);
+    var r = new RigidRectangle(xf, 200, 3);
     g.setRigidBody(r);
     g.toggleDrawRenderable();
+    g.toggleDrawRigidShape();
 
     r.setMass(0);
-    xf.setSize(w, h);
+    xf.setSize(200, 3);
     xf.setPosition(x, y);
+    xf.setRotationInDegree(d);
     this.mAllObjs.addToSet(g);
 };
 
