@@ -70,8 +70,8 @@ RigidShape.prototype.setVelocity = function(x, y) {
 };
 RigidShape.prototype.getVelocity = function() { return this.mVelocity;};
 RigidShape.prototype.flipVelocity = function() { 
-    this.mVelocity[0] = -this.mVelocity[0];
-    this.mVelocity[1] = -this.mVelocity[1];
+    this.mVelocity[0] = -this.mVelocity[0] * 0.5;
+    this.mVelocity[1] = -this.mVelocity[1] * 0.5;
 };
 
 RigidShape.prototype.travel = function() {
