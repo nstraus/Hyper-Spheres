@@ -92,8 +92,10 @@
         <script type="text/javascript" src="src/Engine/RigidShapes/RigidRectangleCircle_Collision.js"></script>
         <script type="text/javascript" src="src/Engine/RigidShapes/RigidRectangle_Collision.js"></script>
         <!-- Client game code -->
+        <script type="text/javascript" src="src/MyGame/Splash.js"></script>
         <script type="text/javascript" src="src/MyGame/MyGame.js"></script>
         <script type="text/javascript" src="src/MyGame/MyGame_Bounds.js"></script>
+        <script type="text/javascript" src="src/MyGame/WinLoss.js"></script>
         <script type="text/javascript" src="src/MyGame/Objects/Car.js"></script>
         <script type="text/javascript" src="src/MyGame/Objects/HeroCar.js"></script>
         <script type="text/javascript" src="src/MyGame/Objects/EnemyCar.js"></script>
@@ -104,11 +106,15 @@
         <script type="text/javascript" src="src/MyGame/Objects/Obstacles.js"></script>
         <script type="text/javascript" src="src/MyGame/Objects/Obstacle.js"></script>
         <script type="text/javascript" src="src/MyGame/Objects/LevelBackground.js"></script>
+        <script type="text/javascript" src="src/MyGame/Objects/Button.js"></script>
+        <script type="text/javascript" src="src/MyGame/Objects/StartButton.js"></script>
+        <script type="text/javascript" src="src/MyGame/Objects/PlayAgain.js"></script>
+        <script type="text/javascript" src="src/MyGame/Objects/ColorSelect.js"></script>
 
     </head>
 
     <body onload="
-        var myGame = new MyGame();
+        var myGame = new Splash();
         gEngine.Core.initializeEngineCore('GLCanvas', myGame);
      ">
         <canvas id="GLCanvas" width="1200" height="600">

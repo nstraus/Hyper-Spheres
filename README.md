@@ -1,10 +1,12 @@
 # Hyper-Spheres
 
 ## To Do List
-- [ ] Splash Screen
+- [X] Splash Screen
 	- [ ] Select Car Color
-- [ ] Win/Loss Screen
-	- [ ] Confetti particles on Win (optional) 
+- [X] Win/Loss Screen
+	- [ ] Confetti particles on Win (optional)
+	- [ ] Podium
+	- [ ] Spectators Cheering
 - [ ] Boosters
 - [ ] Rounded Field Corners
 - [ ] Goal Art
@@ -15,6 +17,7 @@
 - [ ] ShakePosition/Stun on Hero/Enemy Collide
 - [ ] Stands with Spectators, celebrate on goal
 - [ ] Improve Enemy AI
+- [ ] Fix lagging in PixelCollision with Obstacles
 
 ## Final Submission Stuff (due Monday 3/12/18)
 - [ ] Short description of game

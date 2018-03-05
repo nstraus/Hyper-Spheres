@@ -11,7 +11,9 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function MyGame() {
+function MyGame(carColor) {
+
+    this.mCarColor = carColor;
 
     /* Textures */
     // find better car art
@@ -75,11 +77,19 @@ function MyGame() {
     this.kViewportHeight = 600;
     this.kWCHeight = this.kViewportHeight * (this.kWCWidth / this.kViewportWidth);
 
+    this.kMaxScore = 5;
+
+    // Timer
+    // FontRenderable that displays how long the match has been running
+
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
 
 
-MyGame.prototype.loadScene = function () {
+MyGame.prototype.loadScene = function (sceneParams) {
+    // load the scene file
+    // need to create this.kSceneFile; choose between JSON and XML
+    // gEngine.TextFileLoader.loadTextFile(this.kSceneFile, gEngine.TextFileLoader.eTextFileType.eTextFile); // if textFile
 
     // Load Textures
     gEngine.Textures.loadTexture(this.kRedCar);
@@ -95,6 +105,9 @@ MyGame.prototype.loadScene = function () {
 };
 
 MyGame.prototype.unloadScene = function () {
+    // unload the Scene File
+    // same this.kSceneFile as in loadScene
+    // gEngine.TextFileLoader.unloadTextFile(this.kSceneFile);
 
     // Unload Textures
     gEngine.Textures.unloadTexture(this.kRedCar);
@@ -106,11 +119,13 @@ MyGame.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kBall);
     gEngine.Textures.unloadTexture(this.kObstacle);
 
+    var nextLevel = new WinLoss(this.mHeroCar.getScore(), this.mEnemyCar.getScore()); // load next level, pass the score parameters here
+    gEngine.Core.startScene(nextLevel);
+
 };
 
 MyGame.prototype.initialize = function () {
-    // Main Camera -> still need to decide how large the World coordinates should be
-    // and the size of each GameObject in relation to World Coordinates
+
     this.mCamera = new Camera(
         vec2.fromValues(0, 0), // position of the camera
         this.kWCWidth,                     // width of camera
@@ -205,6 +220,19 @@ MyGame.prototype.draw = function () {
 // The Update function, updates the application state. Make sure to _NOT_ draw
 // anything from this function!
 MyGame.prototype.update = function () {
+
+    if (this.mHeroCar.getScore() >= this.kMaxScore) {
+        gEngine.GameLoop.stop();
+    }
+
+    if (this.mEnemyCar.getScore() >= this.kMaxScore) {
+        gEngine.GameLoop.stop();
+    }
+
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.N)) {
+        // test code for switching to win/loss scene
+        gEngine.GameLoop.stop();
+    }
 
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Space)) {
         // Use Booster on Space Press
