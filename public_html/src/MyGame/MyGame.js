@@ -218,6 +218,15 @@ MyGame.prototype.initialize = function () {
     gEngine.AudioClips.playBackgroundAudio(this.kSong);
 };
 
+MyGame.prototype._resetField = function () {
+  this.mBall.getXform().setPosition(0, 0);
+  this.mBall.getRigidBody().setVelocity(0, 0);
+  this.mAllObjs.getObjectAt(1).getXform().setPosition(50, 0);
+  this.mAllObjs.getObjectAt(1).getRigidBody().setVelocity(0, 0);
+  this.mAllObjs.getObjectAt(0).getXform().setPosition(-50, 0);
+  this.mAllObjs.getObjectAt(0).getRigidBody().setVelocity(0, 0);
+}
+
 // This is the draw function, make sure to setup proper drawing environment, and more
 // importantly, make sure to _NOT_ change any state.
 MyGame.prototype.draw = function () {
@@ -312,32 +321,29 @@ MyGame.prototype.update = function () {
         this.kViewType = !this.kViewType;
     }
 
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.C)) {
+      this.mPlayerSpectators.celebrate();
+    }
+
     if (this.mBall.getBBox().intersectsBound(this.mGoals[0].getBBox())) {
         this.mEnemyCar.score();
         gEngine.AudioClips.playACue(this.kEnemyGoal);
-        this.mBall.getXform().setPosition(0, 0);
-        this.mBall.getRigidBody().setVelocity(0, 0);
-        this.mAllObjs.getObjectAt(1).getXform().setPosition(50, 0);
-        this.mAllObjs.getObjectAt(1).getRigidBody().setVelocity(0, 0);
-        this.mAllObjs.getObjectAt(0).getXform().setPosition(-50, 0);
-        this.mAllObjs.getObjectAt(0).getRigidBody().setVelocity(0, 0);
+        this._resetField();
     }
 
     if (this.mBall.getBBox().intersectsBound(this.mGoals[1].getBBox())) {
         this.mHeroCar.score();
         gEngine.AudioClips.playACue(this.kPlayerGoal);
-        this.mBall.getXform().setPosition(0, 0);
-        this.mBall.getRigidBody().setVelocity(0, 0);
-        this.mAllObjs.getObjectAt(1).getXform().setPosition(50, 0);
-        this.mAllObjs.getObjectAt(1).getRigidBody().setVelocity(0, 0);
-        this.mAllObjs.getObjectAt(0).getXform().setPosition(-50, 0);
-        this.mAllObjs.getObjectAt(0).getRigidBody().setVelocity(0, 0);
+        this._resetField();
     }
 
 
     this.mObstacles.update();
 
     this.mAllObjs.update(this.mCamera); // very important line!! Don't remove this
+    
+    this.mPlayerSpectators.update();
+    this.mAISpectators.update();
 
     // Pixel_Collision for the Obstacles
     this.mObstacles.collide(this.mBall);

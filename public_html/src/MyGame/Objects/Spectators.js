@@ -3,6 +3,7 @@
 function Spectators(standsTexture, spectatorTexture, pos) {
 
   this.kSpectatorTexture = spectatorTexture;
+  this.mShake = new ShakePosition(0,0,0,0);
 
   this.mStands = new TextureRenderable(standsTexture);
   this.mStands.setColor([1, 1, 1, 0]);
@@ -19,5 +20,12 @@ Spectators.prototype.fillStands = function(members) {
   let i = 0;
   for (; i <= members; i++){
     this.addToSet(new Spectator(this.kSpectatorTexture, this.mStands.getXform().getPosition()));
+  }
+}
+
+Spectators.prototype.celebrate = function() {
+  let i = 1;
+  for (; i < this.mSet.length; i++) {
+    this.mSet[i].celebrate();
   }
 }
