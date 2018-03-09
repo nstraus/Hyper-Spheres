@@ -30,10 +30,10 @@ MyGame.prototype.createBounds = function() {
     this.wallAt(0, 50, 0); // Top
     this.wallAt(0, -50, 0); // Bottom
 
-    this.wallAt(90, -45, 45); // Bottom
-    this.wallAt(90, 45, -45); // Bottom
-    this.wallAt(-90, -45, -45); // Bottom
-    this.wallAt(-90, 45, 45); // Bottom
+    this.wallAt(90, -45, 45);
+    this.wallAt(90, 45, -45);
+    this.wallAt(-90, -45, -45);
+    this.wallAt(-90, 45, 45); 
 };
 
 MyGame.prototype.wallAt = function (x, y, d) {

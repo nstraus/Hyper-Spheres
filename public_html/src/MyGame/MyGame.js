@@ -26,6 +26,8 @@ function MyGame(carColor) {
     this.kTargetTexture = "assets/target.png";
     this.kGrass = "assets/Grass.png";
     this.kBall = "assets/Ball.png";
+    this.kStands = "assets/wall.png"
+    this.kSpectator = "assets/Ball.png"
 
     /* Audio */
     this.kSong = "assets/In-House.wav";
@@ -107,6 +109,8 @@ MyGame.prototype.loadScene = function (sceneParams) {
     gEngine.Textures.loadTexture(this.kGrass);
     gEngine.Textures.loadTexture(this.kBall);
     gEngine.Textures.loadTexture(this.kObstacle);
+    gEngine.Textures.loadTexture(this.kSpectator);
+    gEngine.Textures.loadTexture(this.kStands);
 
     // Load Audio
     gEngine.AudioClips.loadAudio(this.kSong);
@@ -128,6 +132,8 @@ MyGame.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kGrass);
     gEngine.Textures.unloadTexture(this.kBall);
     gEngine.Textures.unloadTexture(this.kObstacle);
+    gEngine.Textures.unloadTexture(this.kSpectator);
+    gEngine.Textures.unloadTexture(this.kStands);
 
     // Stop Audio
     gEngine.AudioClips.stopBackgroundAudio();
@@ -191,8 +197,11 @@ MyGame.prototype.initialize = function () {
     this.mAllObjs.addToSet(this.mEnemyCar);
     this.mAllObjs.addToSet(this.mBall);
 
-    // this.mAllObjs.addToSet(this.mGoals[0]); this lets the Goals get pushed around with Engine.processCollisions
-    // this.mAllObjs.addToSet(this.mGoals[1]);
+    this.mPlayerSpectators = new Spectators(this.kStands, this.kSpectator, [0,-65]);
+    this.mPlayerSpectators.fillStands(30);
+
+    this.mAISpectators = new Spectators(this.kStands, this.kSpectator, [0,65]);
+    this.mAISpectators.fillStands(30);
 
     this.createBounds(); // needs the textures this.kTextureTarget, this.kWallTexture, this.kPlatformTexture
 
@@ -225,6 +234,8 @@ MyGame.prototype.draw = function () {
     this.mObstacles.draw(camToRender);
     this.mAllObjs.draw(camToRender);
     this.mMsg.draw(camToRender);
+    this.mAISpectators.draw(camToRender);
+    this.mPlayerSpectators.draw(camToRender);
 
     if (!this.kViewType) {
       this.mMinimapCam.setupViewProjection(0); // 0 makes it so the canvas is not cleared for the minimap portion
