@@ -5,10 +5,10 @@
 	- [ ] Select Car Color
 - [X] Win/Loss Screen
 	- [ ] Confetti particles on Win (optional)
-	- [ ] Podium
+	- [X] Podium
 	- [ ] Spectators Cheering
 - [ ] Boosters
-- [ ] Rounded Field Corners
+- [X] Rounded Field Corners
 - [ ] Goal Art
 - [ ] Lighting and Normal Maps
 	- [ ] Head Lights on Cars
@@ -16,8 +16,8 @@
 	- [ ] Normal Map on Car
 - [ ] ShakePosition/Stun on Hero/Enemy Collide
 - [ ] Stands with Spectators, celebrate on goal
-- [ ] Improve Enemy AI
-- [ ] Fix lagging in PixelCollision with Obstacles
+- [X] Improve Enemy AI
+- [X] Fix lagging in PixelCollision with Obstacles
 
 ## Final Submission Stuff (due Monday 3/12/18)
 - [ ] Short description of game

@@ -13,20 +13,13 @@
 
 function HeroCar(spriteTexture) {
 
-    // Boosters that the car has picked up
+    this.mBoosters = [];
 
     Car.call(this, spriteTexture);
 
     this.kSpriteTexture = spriteTexture;
 
     this.getXform().setPosition(-50, 0); // move init position so that it's not the same as HeroCar
-
-    /*
-    var r = new RigidRectangle(this.getXform(), 3, 4);
-    this.setRigidBody(r);
-    this.toggleDrawRenderable();
-    this.toggleDrawRigidShape();
-    */
 
 }
 gEngine.Core.inheritPrototype(HeroCar, Car);
@@ -39,4 +32,23 @@ HeroCar.prototype.getTexture = function() {
     return this.kSpriteTexture;
 }
 
-// HeroCar.prototype.draw = fumction () { // implement this };
+HeroCar.prototype.useBooster = function() {
+    if (this.mBoosters > 0) {
+        var vel = this.getRigidBody().getVelocity();
+        this.getRigidBody().setVelocity(vel[0] * 2, vel[1] * 2);
+        this.mBoosters--; 
+    }
+}
+
+HeroCar.prototype.pickUpBooster = function(booster) {
+    this.mBoosters.push(booster);
+    // move booster position to the Inventory Display on the UI and draw the renderable there
+}
+
+HeroCar.prototype.draw = function(camera) {
+
+    this.getRenderable().draw(camera);
+
+    // draw the set of Boosters to the UI
+
+};

@@ -16,8 +16,6 @@ function Car(spriteTexture) {
 
     var r = new RigidCircle(this.getXform(), 2.5); // size of Xform is 10
     this.setRigidBody(r);
-    // this.toggleDrawRenderable();
-    this.toggleDrawRigidShape();
 
     this.mScore = 0; // initialize Score to 0
 }

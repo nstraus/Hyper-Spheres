@@ -26,11 +26,9 @@ gEngine.Core.inheritPrototype(Obstacles, GameObjectSet);
 
 Obstacles.prototype.update = function() {
 
-	var spawnObstacle = null;
-
 	this.mSpawnCounter--; // decrement Spawn Counter
 	if (this.mSpawnCounter <= 0 && this.kSpawning) {
-		spawnObstacle = this.spawnObstacle();
+		this.spawnObstacle();
 		this.mSpawnCounter = this.kSpawnRate;
 	}
 
@@ -48,10 +46,9 @@ Obstacles.prototype.spawnObstacle = function() {
 	var posX = (Math.random() - 0.5) * this.kWCWidth; // generate random number for WC x position
 	var posY = (Math.random() - 0.5) * this.kWCHeight; // generate random number for WC y position
 
-	var obstacle = new Obstacle(this.kTexture, [posX, posY]); //
+	var obstacle = new Obstacle(this.kTexture, [posX, posY]);
 
 	this.addToSet(obstacle); // create new Obstacle, add to set
-	return obstacle;
 }
 
 Obstacles.prototype.incSpawnRate = function() {

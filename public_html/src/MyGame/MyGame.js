@@ -18,7 +18,6 @@ function MyGame(carColor) {
     /* Textures */
     // find better car art
     // make the cars into a sprite sheet
-    // this art is probably fine for the demo on Monday
     this.kRedCar = "assets/RedCar.png";
     this.kGreenCar = "assets/GreenCar.png";
     this.kPlatformTexture = "assets/platform.png";
@@ -28,14 +27,15 @@ function MyGame(carColor) {
     this.kBall = "assets/Ball.png";
     this.kStands = "assets/wall.png"
     this.kSpectator = "assets/Ball.png"
+    this.kBooster = "assets/Booster.png";
+    this.kObstacle = "assets/platform.png";
 
     /* Audio */
     this.kSong = "assets/In-House.wav";
     this.kPlayerGoal = "assets/PlayerGoal.wav";
     this.kEnemyGoal = "assets/EnemyGoal.wav";
 
-    // pick an Obstacle Texture that isn't the platform.png
-    this.kObstacle = "assets/platform.png";
+
 
     /* GameObjects */
     // HeroCar
@@ -111,6 +111,7 @@ MyGame.prototype.loadScene = function (sceneParams) {
     gEngine.Textures.loadTexture(this.kObstacle);
     gEngine.Textures.loadTexture(this.kSpectator);
     gEngine.Textures.loadTexture(this.kStands);
+    gEngine.Textures.loadTexture(this.kBooster);
 
     // Load Audio
     gEngine.AudioClips.loadAudio(this.kSong);
@@ -134,6 +135,7 @@ MyGame.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kObstacle);
     gEngine.Textures.unloadTexture(this.kSpectator);
     gEngine.Textures.unloadTexture(this.kStands);
+    gEngine.Textures.unloadTexture(this.kBooster);
 
     // Stop Audio
     gEngine.AudioClips.stopBackgroundAudio();
@@ -185,11 +187,13 @@ MyGame.prototype.initialize = function () {
 
     // Goals
     this.mGoals[0] = new Goal(this.kRedCar, true); // left side of viewport // find a texture for this
-
     this.mGoals[1] = new Goal(this.kRedCar, false); // right side of viewport // find a texture for this
 
     // Obstacles
-    this.mObstacles = new Obstacles(this.kObstacle, this.kWCWidth, this.kWCHeight); // spriteSheet with Obstacles on it
+    this.mObstacles = new Obstacles(this.kObstacle, this.kWCWidth, this.kWCHeight);
+
+    // Boosters
+    this.mBoosters = new Boosters(this.kBooster, this.kWCWidth, this.kWCHeight);
 
     // AllObjs Array for Physics Collisions
     this.mAllObjs = new GameObjectSet();
@@ -245,6 +249,7 @@ MyGame.prototype.draw = function () {
     this.mMsg.draw(camToRender);
     this.mAISpectators.draw(camToRender);
     this.mPlayerSpectators.draw(camToRender);
+    this.mBoosters.draw(camToRender);
 
     if (!this.kViewType) {
       this.mMinimapCam.setupViewProjection(0); // 0 makes it so the canvas is not cleared for the minimap portion
@@ -252,6 +257,7 @@ MyGame.prototype.draw = function () {
       this.mGoals[1].draw(this.mMinimapCam);
       this.mObstacles.draw(this.mMinimapCam);
       this.mAllObjs.draw(this.mMinimapCam);
+      this.mBoosters.draw(this.mMinimapCam);
     }
 
 };
@@ -280,7 +286,8 @@ MyGame.prototype.update = function () {
     }
 
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Space)) {
-        // Use Booster on Space Press
+        this.mBoosters.useBooster();
+        // add velocity to the player Xform/GameObject
     }
 
     let shownCam = this.kViewType ? this.mCamera : this.mZoomCam;
@@ -345,10 +352,18 @@ MyGame.prototype.update = function () {
     this.mPlayerSpectators.update();
     this.mAISpectators.update();
 
-    // Pixel_Collision for the Obstacles
+    // Pixel_Collision is a requirement for the Game
+    // so either change Obstacle collsion back to pixel_collision
+    // or do pixel collision somewhere else
     this.mObstacles.collide(this.mBall);
     this.mObstacles.collide(this.mHeroCar);
     this.mObstacles.collide(this.mEnemyCar);
+
+    this.mBoosters.update();
+
+    this.mBoosters.collide(this.mHeroCar);
+    this.mBoosters.collide(this.mEnemyCar);
+    this.mBoosters.collideBall(this.mBall);
 
     // use this physics function for collisions
     gEngine.Physics.processCollision(this.mAllObjs, this.mCollisionInfos);

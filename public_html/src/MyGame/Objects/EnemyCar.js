@@ -6,7 +6,6 @@
 "use strict";
 
 function EnemyCar(spriteTexture) {
-	// implement this
 
 	this.kSpriteTexture = spriteTexture;
 
@@ -14,6 +13,7 @@ function EnemyCar(spriteTexture) {
 
     this.getXform().setPosition(50, 0); // move init position so that it's not the same as HeroCar
 
+    this.mBoosters = [];
 
 }
 gEngine.Core.inheritPrototype(EnemyCar, Car);
@@ -24,4 +24,9 @@ gEngine.Core.inheritPrototype(EnemyCar, Car);
 
 EnemyCar.prototype.getTexture = function() {
 	return this.kSpriteTexture;
+}
+
+EnemyCar.prototype.pickUpBooster = function(booster) {
+	this.mBoosters.push(booster);
+	// update AI to actually use these
 }

@@ -12,6 +12,10 @@ function Obstacle(spriteTexture, pos) {
 	this.mObstacle.getXform().setPosition(pos[0], pos[1]);
 	this.mObstacle.getXform().setSize(5, 5);
 
+	// Random Rotation
+	var degrees = 360 * Math.random();
+	this.mObstacle.getXform().setRotationInDegree(degrees);
+
 	GameObject.call(this, this.mObstacle);
 
 	this.kLifespan = 360; // number of update cycles before the obstacle disapears, 2 secs at 60 Hz
