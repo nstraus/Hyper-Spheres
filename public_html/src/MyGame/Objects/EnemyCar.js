@@ -12,6 +12,7 @@ function EnemyCar(spriteTexture) {
     Car.call(this, spriteTexture);
 
     this.getXform().setPosition(50, 0); // move init position so that it's not the same as HeroCar
+    this.getXform().setRotationInDegree(270);
 
     this.mBoosters = [];
 
