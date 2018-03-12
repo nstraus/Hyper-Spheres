@@ -25,31 +25,32 @@ MyGame.prototype.radomizeVelocity = function()
 };
 
 MyGame.prototype.createBounds = function() {
-    this.wallAt(-100, 0, 90); // Left
-    this.wallAt(100, 0, 90); // Right
-    this.wallAt(0, 50, 0); // Top
-    this.wallAt(0, -50, 0); // Bottom
+    this.wallAt(-100, 0, 90, 70); // Left
+    this.wallAt(100, 0, 90, 70); // Right
+    this.wallAt(0, 50, 0, 160); // Top
+    this.wallAt(0, -50, 0, 160); // Bottom
 
-    this.wallAt(90, -45, 45);
-    this.wallAt(90, 45, -45);
-    this.wallAt(-90, -45, -45);
-    this.wallAt(-90, 45, 45); 
+    this.wallAt(90, -45, 45, 20);
+    this.wallAt(90, 45, -45, 20);
+    this.wallAt(-90, -45, -45, 20);
+    this.wallAt(-90, 45, 45, 20);
 };
 
-MyGame.prototype.wallAt = function (x, y, d) {
-    var p = new TextureRenderable(this.kWallTexture);
+MyGame.prototype.wallAt = function (x, y, d, l) {
+    var p = new IllumRenderable(this.kThinWall, this.kThinWallNorm);
+    p.setElementPixelPositions(0, 789, 111, 256);
     var xf = p.getXform();
-
-    var g = new GameObject(p);
-    var r = new RigidRectangle(xf, 200, 3);
-    g.setRigidBody(r);
-    g.toggleDrawRenderable();
-    g.toggleDrawRigidShape();
-
-    r.setMass(0);
-    xf.setSize(200, 3);
+    xf.setSize(l, 3);
     xf.setPosition(x, y);
     xf.setRotationInDegree(d);
+    p.getMaterial().setSpecular([1, 0, 0, 1]);
+
+    var r = new RigidRectangle(xf, 200, 3);
+    r.setMass(0);
+
+    var g = new GameObject(p);
+    g.setRigidBody(r);
+
     this.mAllObjs.addToSet(g);
 };
 

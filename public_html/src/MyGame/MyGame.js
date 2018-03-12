@@ -25,8 +25,8 @@ function MyGame(carColor) {
     this.kTargetTexture = "assets/target.png";
     this.kGrass = "assets/Grass.png";
     this.kBall = "assets/Ball.png";
-    this.kStands = "assets/wall.png"
-    this.kSpectator = "assets/Ball.png"
+    this.kStands = "assets/stands.png"
+    this.kSpectator = "assets/spectator.png"
     this.kBooster = "assets/Booster.png";
     this.kObstacle = "assets/platform.png";
     this.kThinWall = "assets/thinWall.png";
@@ -170,7 +170,7 @@ MyGame.prototype.initialize = function () {
 
     this.mCamera = new Camera(
         vec2.fromValues(0, 0), // position of the camera
-        this.kWCWidth,                     // width of camera
+        this.kWCWidth * 1.5,                     // width of camera
         [0, 0, this.kViewportWidth, this.kViewportHeight] // viewport (orgX, orgY, width, height)
     );
     this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
@@ -243,7 +243,7 @@ MyGame.prototype.initialize = function () {
     this.mBallLight.setLightType(Light.eLightType.eSpotlight);
     this.mBallLight.setXPos(0); // x
     this.mBallLight.setYPos(0); // y
-    this.mBallLight.setZPos(5); // z 
+    this.mBallLight.setZPos(5); // z
     this.mBallLight.setNear(5); // near
     this.mBallLight.setFar(10); // far
     this.mBallLight.setIntensity(2.8); // intensity
@@ -397,19 +397,21 @@ MyGame.prototype.update = function () {
         this.mEnemyCar.score();
         gEngine.AudioClips.playACue(this.kEnemyGoal);
         this._resetField();
+        this.mAISpectators.celebrate();
     }
 
     if (this.mBall.getBBox().intersectsBound(this.mGoals[1].getBBox())) {
         this.mHeroCar.score();
         gEngine.AudioClips.playACue(this.kPlayerGoal);
         this._resetField();
+        this.mPlayerSpectators.celebrate();
     }
 
 
     this.mObstacles.update();
 
     this.mAllObjs.update(this.mCamera); // very important line!! Don't remove this
-    
+
     this.mPlayerSpectators.update();
     this.mAISpectators.update();
 
