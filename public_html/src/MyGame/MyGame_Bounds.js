@@ -44,6 +44,7 @@ MyGame.prototype.wallAt = function (x, y, d, l) {
     p.addLight(this.mBallLight.getLight());
     p.addLight(this.mHeroHeadlights.getLight());
     p.addLight(this.mEnemyHeadlights.getLight());
+    p.addLight(this.mDirectionalLight.getLight());
 
     var xf = p.getXform();
     xf.setSize(l, 3);

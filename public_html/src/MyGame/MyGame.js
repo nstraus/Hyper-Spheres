@@ -99,8 +99,10 @@ function MyGame(carColor) {
 
     // headlights on the car
     this.mHeroHeadlights = null;
-
     this.mEnemyHeadlights = null;
+
+    // directional light
+    this.mDirectionalLight = null;
 
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
@@ -229,6 +231,10 @@ MyGame.prototype.initialize = function () {
     this.mHeroHeadlights = new Headlight();
     this.mEnemyHeadlights = new Headlight();
 
+    this.mDirectionalLight = new BallLight();
+    this.mDirectionalLight.getLight().setLightType(Light.eLightType.eDirectionalLight);
+    this.mDirectionalLight.getLight().setIntensity(0.2);
+    this.mDirectionalLight.getLight().setDirection([-0.5, -0.5, -1]);
 
     this.createBounds(); // needs the textures this.kThinWall, this.kThinWallNorm
 
@@ -245,6 +251,7 @@ MyGame.prototype.initialize = function () {
     this.mBG.getGrass().addLight(this.mBallLight.getLight());
     this.mBG.getGrass().addLight(this.mHeroHeadlights.getLight());
     this.mBG.getGrass().addLight(this.mEnemyHeadlights.getLight());
+    this.mBG.getGrass().addLight(this.mDirectionalLight.getLight());
 
     // Add lights to Hero Car
     this.mHeroCar.getRenderable().addLight(this.mBallLight.getLight());

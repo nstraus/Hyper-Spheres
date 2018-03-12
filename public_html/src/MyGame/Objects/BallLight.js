@@ -7,7 +7,7 @@
 
 function BallLight() {
 	this.mBallLight = new Light();
-    this.mBallLight.setLightType(Light.eLightType.ePointlight);
+    this.mBallLight.setLightType(Light.eLightType.ePointLight);
     this.mBallLight.setXPos(0); // x
     this.mBallLight.setYPos(0); // y
     this.mBallLight.setZPos(5); // z
