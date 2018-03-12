@@ -18,6 +18,7 @@ function Car(spriteTexture) {
     this.setRigidBody(r);
 
     this.mScore = 0; // initialize Score to 0
+
 }
 gEngine.Core.inheritPrototype(Car, GameObject);
 
