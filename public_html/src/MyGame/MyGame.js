@@ -241,9 +241,19 @@ MyGame.prototype.initialize = function () {
 
     this.mBG = new LevelBackground(this.kGrass);
 
-    this.mBG.getGrass().addLight(this.mBallLight.getLight()); // add the light to the background
-    this.mBG.getGrass().addLight(this.mHeroHeadlights.getLight()); // add the light to the background
-    this.mBG.getGrass().addLight(this.mEnemyHeadlights.getLight()); // add the light to the background
+    // Add lights to Background
+    this.mBG.getGrass().addLight(this.mBallLight.getLight());
+    this.mBG.getGrass().addLight(this.mHeroHeadlights.getLight());
+    this.mBG.getGrass().addLight(this.mEnemyHeadlights.getLight());
+
+    // Add lights to Hero Car
+    this.mHeroCar.getRenderable().addLight(this.mBallLight.getLight());
+    this.mHeroCar.getRenderable().addLight(this.mEnemyHeadlights.getLight());
+
+    // Add lights to Enemy Car
+    this.mEnemyCar.getRenderable().addLight(this.mBallLight.getLight());
+    this.mEnemyCar.getRenderable().addLight(this.mHeroHeadlights.getLight());
+
 
     // Start the background audio.
     gEngine.AudioClips.playBackgroundAudio(this.kSong);

@@ -7,7 +7,7 @@
 
 function Car(spriteTexture) {
 
-	this.mCar = new TextureRenderable(spriteTexture);
+	this.mCar = new LightRenderable(spriteTexture);
     this.mCar.setColor([1, 1, 1, 0]);
     this.mCar.getXform().setPosition(0, 0);
     this.mCar.getXform().setSize(5, 5);
