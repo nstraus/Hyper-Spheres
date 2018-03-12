@@ -10,7 +10,7 @@ function Booster(spriteTexture, pos) {
 	this.mBooster = new TextureRenderable(spriteTexture);
 	this.mBooster.setColor([1, 1, 1, 0]);
 	this.mBooster.getXform().setPosition(pos[0], pos[1]);
-	this.mBooster.getXform().setSize(10, 5);
+	this.mBooster.getXform().setSize(4, 2);
 
 	GameObject.call(this, this.mBooster);
 

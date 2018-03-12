@@ -86,7 +86,7 @@ function MyGame(carColor) {
     this.kViewportHeight = 600;
     this.kWCHeight = this.kViewportHeight * (this.kWCWidth / this.kViewportWidth);
 
-    this.kMaxScore = 5;
+    this.kMaxScore = 7;
 
     // Timer
     this.t0 = 0;
