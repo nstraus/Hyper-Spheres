@@ -248,21 +248,12 @@ MyGame.prototype.initialize = function () {
     this.mBallLight.setFar(10); // far
     this.mBallLight.setIntensity(2.8); // intensity
 
-    this.mHeroHeadlights = new Light();
-    this.mHeroHeadlights.setLightType(Light.eLightType.eSpotLight);
-    this.mHeroHeadlights.setXPos(0);
-    this.mHeroHeadlights.setYPos(10);
-    this.mHeroHeadlights.setZPos(5);
-    this.mHeroHeadlights.setDirection([-0.7, -1, -1]);
-    this.mHeroHeadlights.setNear(5);
-    this.mHeroHeadlights.setFar(20);
-    this.mHeroHeadlights.setInner(1.7);
-    this.mHeroHeadlights.setOuter(1.8);
-    this.mHeroHeadlights.setIntensity(2);
-    this.mHeroHeadlights.setDropOff(1.2);
+    this.mHeroHeadlights = new Headlight();
+    this.mEnemyHeadlights = new Headlight();
 
     this.mBG.getGrass().addLight(this.mBallLight); // add the light to the background
-    this.mBG.getGrass().addLight(this.mHeroHeadlights); // add the light to the background
+    this.mBG.getGrass().addLight(this.mHeroHeadlights.getLight()); // add the light to the background
+    this.mBG.getGrass().addLight(this.mEnemyHeadlights.getLight()); // add the light to the background
 
     // IllumRenderable for wall normal map testing
     this.mWallTest = new IllumRenderable(this.kThinWall, this.kThinWallNorm);
@@ -271,7 +262,8 @@ MyGame.prototype.initialize = function () {
     this.mWallTest.getXform().setPosition(-5, 0);
     this.mWallTest.getMaterial().setSpecular([1, 0, 0, 1]);
     this.mWallTest.addLight(this.mBallLight);
-    this.mWallTest.addLight(this.mHeroHeadlights);
+    this.mWallTest.addLight(this.mHeroHeadlights.getLight());
+    this.mWallTest.addLight(this.mEnemyHeadlights.getLight());
 
     this.mWall = new GameObject(this.mWallTest);
 
@@ -324,6 +316,10 @@ MyGame.prototype.draw = function () {
 // The Update function, updates the application state. Make sure to _NOT_ draw
 // anything from this function!
 MyGame.prototype.update = function () {
+
+    // update the car headlights
+    this.mHeroHeadlights.update(this.mHeroCar.getXform());
+    this.mEnemyHeadlights.update(this.mEnemyCar.getXform());
 
     // Starting the timer.
     if (this.t0 === 0)

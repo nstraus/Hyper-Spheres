@@ -7,13 +7,15 @@
 	- [ ] Confetti particles on Win (optional)
 	- [X] Podium
 	- [ ] Spectators Cheering
-- [ ] Boosters
+- [X] Boosters
 - [X] Rounded Field Corners
 - [ ] Goal Art
 - [ ] Lighting and Normal Maps
-	- [ ] Head Lights on Cars
-	- [ ] Spotlight on Ball
+	- [X] Head Lights direction and position follows Cars
+	- [ ] Spotlight movement follows Ball
 	- [ ] Normal Map on Car
+	- [X] Normal Map on Wall
+	- [ ] Point Light on Goals
 - [ ] ShakePosition/Stun on Hero/Enemy Collide
 - [ ] Stands with Spectators, celebrate on goal
 - [X] Improve Enemy AI
