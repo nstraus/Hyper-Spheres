@@ -53,8 +53,7 @@ Boosters.prototype.toggleSpawning = function() {
 
 Boosters.prototype.collide = function(obj) {
 	for (var i = 0; i < this.mSet.length; i++) {
-		if (obj.getBBox().intersectsBound(this.mSet[i].getBBox())) { 
-		// should be pixel_collision since pixelCollision is required at least once in the game
+		if (obj.pixelTouches(this.mSet[i], [0, 0])) {
 			obj.pickUpBooster(this.mSet[i]);
 			this.mSet.splice(i - 1, 1); // remove Booster from set of randomly spawned boosters
 
