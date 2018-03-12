@@ -225,19 +225,7 @@ MyGame.prototype.initialize = function () {
     this.mAISpectators = new Spectators(this.kStands, this.kSpectator, [0,65]);
     this.mAISpectators.fillStands(30);
 
-    this.createBounds(); // needs the textures this.kTextureTarget, this.kWallTexture, this.kPlatformTexture
-
-    // Score Reporting Font Renderable
-    this.mMsg = new FontRenderable("Score 0 - 0");
-    this.mMsg.setColor([0, 0, 0, 1]);
-    let textXForm = this.mMsg.getXform();
-    this.mMsg.setTextHeight(3);
-    textXForm.setPosition(0 - textXForm.getWidth()/2, 45);
-
-    this.mBG = new LevelBackground(this.kGrass);
-
-
-
+    // define Lights before Bounds to add them to the Walls in this.createBounds();
     // Lights
     this.mBallLight = new Light();
     this.mBallLight.setLightType(Light.eLightType.eSpotlight);
@@ -251,21 +239,21 @@ MyGame.prototype.initialize = function () {
     this.mHeroHeadlights = new Headlight();
     this.mEnemyHeadlights = new Headlight();
 
+
+    this.createBounds(); // needs the textures this.kThinWall, this.kThinWallNorm
+
+    // Score Reporting Font Renderable
+    this.mMsg = new FontRenderable("Score 0 - 0");
+    this.mMsg.setColor([0, 0, 0, 1]);
+    let textXForm = this.mMsg.getXform();
+    this.mMsg.setTextHeight(3);
+    textXForm.setPosition(0 - textXForm.getWidth()/2, 45);
+
+    this.mBG = new LevelBackground(this.kGrass);
+
     this.mBG.getGrass().addLight(this.mBallLight); // add the light to the background
     this.mBG.getGrass().addLight(this.mHeroHeadlights.getLight()); // add the light to the background
     this.mBG.getGrass().addLight(this.mEnemyHeadlights.getLight()); // add the light to the background
-
-    // IllumRenderable for wall normal map testing
-    this.mWallTest = new IllumRenderable(this.kThinWall, this.kThinWallNorm);
-    this.mWallTest.setElementPixelPositions(0, 1024, 0, 256);
-    this.mWallTest.getXform().setSize(20, 5);
-    this.mWallTest.getXform().setPosition(-5, 0);
-    this.mWallTest.getMaterial().setSpecular([1, 0, 0, 1]);
-    this.mWallTest.addLight(this.mBallLight);
-    this.mWallTest.addLight(this.mHeroHeadlights.getLight());
-    this.mWallTest.addLight(this.mEnemyHeadlights.getLight());
-
-    this.mWall = new GameObject(this.mWallTest);
 
     // Start the background audio.
     gEngine.AudioClips.playBackgroundAudio(this.kSong);
@@ -300,7 +288,6 @@ MyGame.prototype.draw = function () {
     this.mPlayerSpectators.draw(camToRender);
     this.mBoosters.draw(camToRender);
     this.mHeroCar.drawBoosterInventory(camToRender);
-    this.mWall.draw(camToRender);
 
     if (!this.kViewType) {
       this.mMinimapCam.setupViewProjection(0); // 0 makes it so the canvas is not cleared for the minimap portion

@@ -39,6 +39,12 @@ MyGame.prototype.createBounds = function() {
 MyGame.prototype.wallAt = function (x, y, d, l) {
     var p = new IllumRenderable(this.kThinWall, this.kThinWallNorm);
     p.setElementPixelPositions(0, 789, 111, 256);
+
+    // add the lights to the IllumRenderable
+    p.addLight(this.mBallLight);
+    p.addLight(this.mHeroHeadlights.getLight());
+    p.addLight(this.mEnemyHeadlights.getLight());
+
     var xf = p.getXform();
     xf.setSize(l, 3);
     xf.setPosition(x, y);
