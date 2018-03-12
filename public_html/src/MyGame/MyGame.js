@@ -391,7 +391,7 @@ MyGame.prototype.update = function () {
     }
 
 
-    this.mObstacles.update();
+    this.mObstacles.update(this.mHeroCar, this.mEnemyCar, this.mBall);
 
     this.mAllObjs.update(this.mCamera); // very important line!! Don't remove this
 
