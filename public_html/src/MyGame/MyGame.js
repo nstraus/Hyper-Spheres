@@ -97,8 +97,13 @@ function MyGame(carColor) {
     // spotlight on the ball
     this.mBallLight = null;
 
+    // Normal Map testing on Wall
+    this.mWallTest = null;
 
     // headlights on the car
+    this.mHeroHeadlights = null;
+
+    this.mEnemyHeadlights = null;
 
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
@@ -231,16 +236,44 @@ MyGame.prototype.initialize = function () {
 
     this.mBG = new LevelBackground(this.kGrass);
 
+
+
     // Lights
     this.mBallLight = new Light();
+    this.mBallLight.setLightType(Light.eLightType.eSpotlight);
     this.mBallLight.setXPos(0); // x
     this.mBallLight.setYPos(0); // y
     this.mBallLight.setZPos(5); // z 
-    this.mBallLight.setNear(20); // near
-    this.mBallLight.setFar(50); // far
+    this.mBallLight.setNear(5); // near
+    this.mBallLight.setFar(10); // far
     this.mBallLight.setIntensity(2.8); // intensity
 
+    this.mHeroHeadlights = new Light();
+    this.mHeroHeadlights.setLightType(Light.eLightType.eSpotLight);
+    this.mHeroHeadlights.setXPos(0);
+    this.mHeroHeadlights.setYPos(10);
+    this.mHeroHeadlights.setZPos(5);
+    this.mHeroHeadlights.setDirection([-0.7, -1, -1]);
+    this.mHeroHeadlights.setNear(5);
+    this.mHeroHeadlights.setFar(20);
+    this.mHeroHeadlights.setInner(1.7);
+    this.mHeroHeadlights.setOuter(1.8);
+    this.mHeroHeadlights.setIntensity(2);
+    this.mHeroHeadlights.setDropOff(1.2);
+
     this.mBG.getGrass().addLight(this.mBallLight); // add the light to the background
+    this.mBG.getGrass().addLight(this.mHeroHeadlights); // add the light to the background
+
+    // IllumRenderable for wall normal map testing
+    this.mWallTest = new IllumRenderable(this.kThinWall, this.kThinWallNorm);
+    this.mWallTest.setElementPixelPositions(0, 1024, 0, 256);
+    this.mWallTest.getXform().setSize(20, 5);
+    this.mWallTest.getXform().setPosition(-5, 0);
+    this.mWallTest.getMaterial().setSpecular([1, 0, 0, 1]);
+    this.mWallTest.addLight(this.mBallLight);
+    this.mWallTest.addLight(this.mHeroHeadlights);
+
+    this.mWall = new GameObject(this.mWallTest);
 
     // Start the background audio.
     gEngine.AudioClips.playBackgroundAudio(this.kSong);
@@ -275,6 +308,7 @@ MyGame.prototype.draw = function () {
     this.mPlayerSpectators.draw(camToRender);
     this.mBoosters.draw(camToRender);
     this.mHeroCar.drawBoosterInventory(camToRender);
+    this.mWall.draw(camToRender);
 
     if (!this.kViewType) {
       this.mMinimapCam.setupViewProjection(0); // 0 makes it so the canvas is not cleared for the minimap portion
@@ -298,14 +332,17 @@ MyGame.prototype.update = function () {
     }
 
     if (this.mHeroCar.getScore() >= this.kMaxScore) {
+        this.mEnemyCar.toggleDrawRigidShape();
         gEngine.GameLoop.stop();
     }
 
     if (this.mEnemyCar.getScore() >= this.kMaxScore) {
+        this.mEnemyCar.toggleDrawRigidShape();
         gEngine.GameLoop.stop();
     }
 
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.N)) {
+        this.mEnemyCar.toggleDrawRigidShape();
         // test code for switching to win/loss scene
         gEngine.GameLoop.stop();
     }
