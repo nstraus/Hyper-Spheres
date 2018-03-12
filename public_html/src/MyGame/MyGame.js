@@ -97,6 +97,9 @@ function MyGame(carColor) {
     // spotlight on the ball
     this.mBallLight = null;
 
+    // Normal Map testing on Wall
+    this.mWallTest = null;
+
     // headlights on the car
     this.mHeroHeadlights = null;
 
@@ -224,9 +227,18 @@ MyGame.prototype.initialize = function () {
 
     // define Lights before Bounds to add them to the Walls in this.createBounds();
     // Lights
-    this.mBallLight = new BallLight();
+    this.mBallLight = new Light();
+    this.mBallLight.setLightType(Light.eLightType.eSpotlight);
+    this.mBallLight.setXPos(0); // x
+    this.mBallLight.setYPos(0); // y
+    this.mBallLight.setZPos(5); // z
+    this.mBallLight.setNear(5); // near
+    this.mBallLight.setFar(10); // far
+    this.mBallLight.setIntensity(2.8); // intensity
+
     this.mHeroHeadlights = new Headlight();
     this.mEnemyHeadlights = new Headlight();
+
 
     this.createBounds(); // needs the textures this.kThinWall, this.kThinWallNorm
 
@@ -239,7 +251,7 @@ MyGame.prototype.initialize = function () {
 
     this.mBG = new LevelBackground(this.kGrass);
 
-    this.mBG.getGrass().addLight(this.mBallLight.getLight()); // add the light to the background
+    this.mBG.getGrass().addLight(this.mBallLight); // add the light to the background
     this.mBG.getGrass().addLight(this.mHeroHeadlights.getLight()); // add the light to the background
     this.mBG.getGrass().addLight(this.mEnemyHeadlights.getLight()); // add the light to the background
 
@@ -295,9 +307,6 @@ MyGame.prototype.update = function () {
     // update the car headlights
     this.mHeroHeadlights.update(this.mHeroCar.getXform());
     this.mEnemyHeadlights.update(this.mEnemyCar.getXform());
-
-    // update the ball spotlight
-    this.mBallLight.update(this.mBall.getXform());
 
     // Starting the timer.
     if (this.t0 === 0)
@@ -420,5 +429,6 @@ MyGame.prototype.update = function () {
     // For the timer.
     this.end = new Date();
     this.millisecondsElapsed = this.end - this.t0;
-
+    
+    gUpdateObject();
 };
