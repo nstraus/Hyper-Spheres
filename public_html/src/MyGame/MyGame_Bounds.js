@@ -83,7 +83,17 @@ MyGame.prototype.movePlayer = function(mouseX, mouseY, multiplier, obj) {
   var rigidShape = obj.getRigidBody();
   var differenceX = mouseX - obj.getXform().getXPos();
   var differenceY = mouseY - obj.getXform().getYPos();
-  differenceX *= velMultiplier;
-  differenceY *= velMultiplier;
+  
+  if (differenceX < 25)
+  {
+    differenceX *= velMultiplier;
+  }
+  
+  if (differenceY < 25)
+  {
+      differenceY *= velMultiplier;
+  }
+  
+  
   rigidShape.setVelocity(differenceX, differenceY);
 };
