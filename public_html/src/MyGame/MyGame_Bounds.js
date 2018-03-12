@@ -41,7 +41,7 @@ MyGame.prototype.wallAt = function (x, y, d, l) {
     p.setElementPixelPositions(0, 789, 111, 256);
 
     // add the lights to the IllumRenderable
-    p.addLight(this.mBallLight);
+    p.addLight(this.mBallLight.getLight());
     p.addLight(this.mHeroHeadlights.getLight());
     p.addLight(this.mEnemyHeadlights.getLight());
 
