@@ -274,6 +274,7 @@ MyGame.prototype.draw = function () {
     this.mAISpectators.draw(camToRender);
     this.mPlayerSpectators.draw(camToRender);
     this.mBoosters.draw(camToRender);
+    this.mHeroCar.drawBoosterInventory(camToRender);
 
     if (!this.kViewType) {
       this.mMinimapCam.setupViewProjection(0); // 0 makes it so the canvas is not cleared for the minimap portion
@@ -310,8 +311,7 @@ MyGame.prototype.update = function () {
     }
 
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Space)) {
-        this.mBoosters.useBooster();
-        // add velocity to the player Xform/GameObject
+        this.mHeroCar.useBooster();
     }
 
     let shownCam = this.kViewType ? this.mCamera : this.mZoomCam;
@@ -375,6 +375,8 @@ MyGame.prototype.update = function () {
     
     this.mPlayerSpectators.update();
     this.mAISpectators.update();
+
+    this.mHeroCar.boosterPos(shownCam); // moves Booster position to the correct position
 
     // Pixel_Collision is a requirement for the Game
     // so either change Obstacle collsion back to pixel_collision

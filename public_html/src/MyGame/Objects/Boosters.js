@@ -51,19 +51,12 @@ Boosters.prototype.toggleSpawning = function() {
 	this.kSpawning = !this.kSpawning;
 };
 
-Boosters.prototype.useBooster = function() {
-	var boosterToUse = this.mInventory.pop();
-	boosterToUse.use();
-};
-
 Boosters.prototype.collide = function(obj) {
 	for (var i = 0; i < this.mSet.length; i++) {
 		if (obj.getBBox().intersectsBound(this.mSet[i].getBBox())) { 
 		// should be pixel_collision since pixelCollision is required at least once in the game
 			obj.pickUpBooster(this.mSet[i]);
 			this.mSet.splice(i - 1, 1); // remove Booster from set of randomly spawned boosters
-			
-
 
 			// inventory should be a part of HeroCar.js and EnemyCar.js; then update EnemyCar AI to use Boosters
 			// add Booster to obj inventory

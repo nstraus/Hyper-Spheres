@@ -28,15 +28,22 @@ HeroCar.prototype.update = function () {
     GameObject.prototype.update.call(this);
 };
 
+HeroCar.prototype.boosterPos = function (shownCam) {
+    let center = shownCam.getWCCenter();
+    for (var i = 0; i < this.mBoosters.length; i++) {
+        this.mBoosters[i].getXform().setPosition(center[0] + (i * 5), center[1] + shownCam.getWCHeight() * 1 / 5);
+    }
+}
+
 HeroCar.prototype.getTexture = function() {
     return this.kSpriteTexture;
 }
 
 HeroCar.prototype.useBooster = function() {
-    if (this.mBoosters > 0) {
+    if (this.mBoosters.length > 0) {
         var vel = this.getRigidBody().getVelocity();
         this.getRigidBody().setVelocity(vel[0] * 2, vel[1] * 2);
-        this.mBoosters--; 
+        this.mBoosters.pop(); // remove a Booster from inventory
     }
 }
 
@@ -49,6 +56,11 @@ HeroCar.prototype.draw = function(camera) {
 
     this.getRenderable().draw(camera);
 
-    // draw the set of Boosters to the UI
-
 };
+
+HeroCar.prototype.drawBoosterInventory = function (camera) {
+    // draw the set of Boosters to the UI
+    for (var i = 0; i < this.mBoosters.length; i++) {
+        this.mBoosters[i].draw(camera);
+    }
+}
