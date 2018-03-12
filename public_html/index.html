@@ -113,7 +113,6 @@
         <script type="text/javascript" src="src/MyGame/Objects/Spectator.js"></script>
         <script type="text/javascript" src="src/MyGame/Objects/Spectators.js"></script>
         <script type="text/javascript" src="src/MyGame/Objects/Headlight.js"></script>
-        <script type="text/javascript" src="src/MyGame/Objects/BallLight.js"></script>
 
 
     </head>
@@ -127,5 +126,23 @@
             Your browser does not support the HTML5 canvas.
             <!-- this message will show only if WebGL clearing failed -->
         </canvas>
+        
+        <br>
+        <div id='UpdateFrame'></div>
+        <hr>
+        <div id='UpdateObject'></div>
+        <script>
+            var gUpdateObject = function() 
+            {
+                var elm = document.getElementById("UpdateObject");
+                elm.innerHTML =
+                     "<b>Click with your mouse</b> where you want your ball to go.<br>" + 
+                     "The farter away you click, the faster your ball will travel.<br>" +
+                     "Push the ball into your oppenents goal on the right side of the field.<br>" +
+                     "<b>Press V</b> to zoom in/zoom out the field.<br>" + 
+                     "<b>Press Space</b> to use a booster if you have one (they spawn on the field).<br>" +
+                     "First to 5 goals wins!";
+            };
+        </script>
     </body>
 </html>
