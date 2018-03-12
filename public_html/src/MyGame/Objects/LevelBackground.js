@@ -7,7 +7,7 @@
 
 function LevelBackground(spriteTexture) {
 	
-	this.mGrass = new TextureRenderable(spriteTexture);
+	this.mGrass = new LightRenderable(spriteTexture);
 	// this.mGrass.setColor([1, 1, 1, 1]);
     this.mGrass.getXform().setPosition(0, 0);
     this.mGrass.getXform().setSize(200, 100);
@@ -19,3 +19,7 @@ function LevelBackground(spriteTexture) {
 
 }
 gEngine.Core.inheritPrototype(LevelBackground, GameObjectSet);
+
+LevelBackground.prototype.getGrass = function() {
+	return this.mGrass;
+}

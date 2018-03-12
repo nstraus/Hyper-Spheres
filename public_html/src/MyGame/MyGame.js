@@ -29,6 +29,8 @@ function MyGame(carColor) {
     this.kSpectator = "assets/Ball.png"
     this.kBooster = "assets/Booster.png";
     this.kObstacle = "assets/platform.png";
+    this.kThinWall = "assets/thinWall.png";
+    this.kThinWallNorm = "assets/ThinWallNorm.png";
 
     /* Audio */
     this.kSong = "assets/In-House.wav";
@@ -91,6 +93,13 @@ function MyGame(carColor) {
     this.end = 0;
     // FontRenderable that displays how long the match has been running
 
+    // Lighting (if we use more than 4, have to change the engine lighting files)
+    // spotlight on the ball
+    this.mBallLight = null;
+
+
+    // headlights on the car
+
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
 
@@ -112,6 +121,8 @@ MyGame.prototype.loadScene = function (sceneParams) {
     gEngine.Textures.loadTexture(this.kSpectator);
     gEngine.Textures.loadTexture(this.kStands);
     gEngine.Textures.loadTexture(this.kBooster);
+    gEngine.Textures.loadTexture(this.kThinWall);
+    gEngine.Textures.loadTexture(this.kThinWallNorm);
 
     // Load Audio
     gEngine.AudioClips.loadAudio(this.kSong);
@@ -136,6 +147,8 @@ MyGame.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kSpectator);
     gEngine.Textures.unloadTexture(this.kStands);
     gEngine.Textures.unloadTexture(this.kBooster);
+    gEngine.Textures.unloadTexture(this.kThinWall);
+    gEngine.Textures.unloadTexture(this.kThinWallNorm);
 
     // Stop Audio
     gEngine.AudioClips.stopBackgroundAudio();
@@ -217,6 +230,17 @@ MyGame.prototype.initialize = function () {
     textXForm.setPosition(0 - textXForm.getWidth()/2, 45);
 
     this.mBG = new LevelBackground(this.kGrass);
+
+    // Lights
+    this.mBallLight = new Light();
+    this.mBallLight.setXPos(0); // x
+    this.mBallLight.setYPos(0); // y
+    this.mBallLight.setZPos(5); // z 
+    this.mBallLight.setNear(20); // near
+    this.mBallLight.setFar(50); // far
+    this.mBallLight.setIntensity(2.8); // intensity
+
+    this.mBG.getGrass().addLight(this.mBallLight); // add the light to the background
 
     // Start the background audio.
     gEngine.AudioClips.playBackgroundAudio(this.kSong);
